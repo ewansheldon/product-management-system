@@ -6,10 +6,15 @@
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "forceConsistentCasingInFileNames": true,
     },
     "include": [
-        "src/**/*.ts"
+        "src/**/*.ts", "tests/**/*.ts"
     ],
     "exclude": [
         "node_modules"
