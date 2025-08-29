@@ -2,7 +2,7 @@ import * as productController from '../../src/api/product.controller';
 import * as productService from '../../src/api/product.service';
 import { mockProduct } from '../common';
 
-jest.mock('../../src/api/product.service.ts');
+jest.mock('../../src/api/product.service');
 const mockedService = productService as jest.Mocked<typeof productService>;
 
 beforeAll(() => {

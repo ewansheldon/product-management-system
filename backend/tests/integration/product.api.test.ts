@@ -7,7 +7,7 @@ jest.mock('../../src/db/product.inMemory.db');
 const mockedDb = db as jest.Mocked<typeof db>;
 
 beforeAll(() => {
-    mockedDb.getAll.mockReturnValue([ mockProduct ]);
+    mockedDb.getAll.mockReturnValue(Promise.resolve([ mockProduct ]));
 });
 
 describe('view products', () => {

@@ -3,7 +3,7 @@ import { app, server } from '../../src/api/app';
 import * as productController from '../../src/api/product.controller';
 import { mockProduct } from '../common';
 
-jest.mock('../../src/api/product.controller.ts');
+jest.mock('../../src/api/product.controller');
 const mockedController = productController as jest.Mocked<typeof productController>;
 
 beforeAll(() => {
