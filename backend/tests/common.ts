@@ -5,3 +5,9 @@ export const mockProduct:Product = {
     name: 'Have One on Me',
     artist: 'Joanna Newsom'
 }
+
+export const otherMockProduct:Product = {
+    id: 1,
+    name: 'Love Is Overtaking me',
+    artist: 'Arthur Russell'
+}

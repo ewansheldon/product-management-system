@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app, server } from '../../src/api/app';
 import * as db from '../../src/db/product.inMemory.db';
-import { mockProduct } from '../common';
+import { mockProduct, otherMockProduct } from '../common';
 
 jest.mock('../../src/db/product.inMemory.db');
 const mockedDb = db as jest.Mocked<typeof db>;
@@ -17,6 +17,14 @@ describe('view products', () => {
         expect(response.headers['content-type']).toMatch(/application\/json/);
         expect(response.body).toHaveLength(1);
         expect(response.body[0]).toEqual(mockProduct);
+    });
+});
+
+describe('create product', () => {
+    it('should create a product', async () => {
+        const response = await request(app).post('/products');
+        expect(response.statusCode).toEqual(201);
+        expect(response.body).toEqual(otherMockProduct);
     });
 });
 
