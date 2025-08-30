@@ -1,13 +1,12 @@
-import { Product } from "../src/api/types"
+import { ProductResponse, ProductRequest } from "../src/api/types"
 
-export const mockProduct:Product = {
+export const exampleProduct:ProductResponse = {
     id: 1,
     name: 'Have One on Me',
     artist: 'Joanna Newsom'
 }
 
-export const otherMockProduct:Product = {
-    id: 1,
+export const exampleProductRequest:ProductRequest = {
     name: 'Love Is Overtaking me',
     artist: 'Arthur Russell'
 }

@@ -1,6 +1,6 @@
-import { Product } from "./types"
+import { ProductResponse } from "./types";
 import * as productDB from '../db/product.inMemory.db';
 
-export const getAll = async (): Promise<Product[]> => {
-    return await productDB.getAll();
-}
+export const getAll = async (): Promise<ProductResponse[]> => {
+  return await productDB.getAll();
+};
