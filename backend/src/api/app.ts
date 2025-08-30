@@ -20,12 +20,11 @@ app.post('/products', async (req: Request, res: Response, next: NextFunction) =>
   }
 });
 
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
   if (err instanceof InvalidParamsError) {
     return res.status(400).json({ error: err.message });
   }
-  
-  res.status(500).json({ error: "Internal Server Error" });
+  next(err);
 })
 
 export const server = app.listen(port, () => {
