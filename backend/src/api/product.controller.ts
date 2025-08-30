@@ -6,5 +6,5 @@ export const getAll = async (): Promise<ProductResponse[]> => {
 };
 
 export const create = async (productRequest: ProductRequest): Promise<ProductResponse> => {
-  return { ...productRequest, id: 0 };
+  return productService.create(productRequest);
 };
