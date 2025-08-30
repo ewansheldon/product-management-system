@@ -1,3 +1,4 @@
+import { InvalidParamsError } from "../api/errors";
 import { ProductRequest, ProductResponse } from "../api/types";
 
 let products: ProductResponse[] = [];
@@ -15,10 +16,8 @@ export const create = async (productRequest: ProductRequest): Promise<ProductRes
 
 export const update = async (id: number, productRequest: ProductRequest): Promise<ProductResponse> => {
   const newProduct = { id, ...productRequest };
-  products = products.map(product => {
-    return product.id === id ?
-      newProduct : 
-      product;
-  });
+  const index = products.findIndex(product => product.id === id);
+  if (index < 0) throw new InvalidParamsError('Invalid ID');
+  products[index] = newProduct;
   return newProduct;
 };
