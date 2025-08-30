@@ -20,6 +20,14 @@ app.post('/products', async (req: Request, res: Response, next: NextFunction) =>
   }
 });
 
+app.patch('/products/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.status(200).json(await productController.update(Number(req.params.id), req.body as ProductRequest));
+  } catch (e) {
+    next(e);
+  }
+});
+
 app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
   if (err instanceof InvalidParamsError) {
     return res.status(400).json({ error: err.message });

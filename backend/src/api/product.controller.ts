@@ -26,3 +26,7 @@ const validate = (productRequest: ProductRequest): ProductRequest => {
 export const create = async (productRequest: ProductRequest): Promise<ProductResponse> => {
   return productService.create(validate(productRequest));
 };
+
+export const update = async (id: number, productRequest: ProductRequest): Promise<ProductResponse> => {
+  return { id, ...productRequest };
+};

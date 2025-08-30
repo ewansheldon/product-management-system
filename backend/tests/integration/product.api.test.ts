@@ -34,12 +34,12 @@ describe('create product', () => {
 describe('update product', () => {
   it('should update a product', async () => {
     const id = 1;
-    const newProductResponse = { id, ...exampleProductRequest };
-    mockedDb.update.mockResolvedValue(newProductResponse);
+    const updatedProductResponse = { id, ...exampleProductRequest };
+    mockedDb.update.mockResolvedValue(updatedProductResponse);
     const response = await request(app).patch(`/products/${id}`).send(exampleProductRequest);
     expect(mockedDb.update).toHaveBeenCalledWith(id, exampleProductRequest);
     expect(response.statusCode).toEqual(200);
-    expect(response.body).toEqual(newProductResponse);
+    expect(response.body).toEqual(updatedProductResponse);
   });
 });
 
