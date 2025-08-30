@@ -10,5 +10,5 @@ export const create = async (productRequest: ProductRequest): Promise<ProductRes
 };
 
 export const update = async (id: number, productRequest: ProductRequest): Promise<ProductResponse> => {
-  return { id, ... productRequest, };
+  return await productDB.update(id, productRequest);
 };

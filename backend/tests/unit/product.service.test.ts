@@ -26,3 +26,14 @@ describe('create', () => {
     expect(product).toEqual(createdProduct);
   })
 });
+
+describe('update', () => {
+  it('updates the product with the db', async () => {
+    const { id } = exampleProduct;
+    const updatedProduct = { id, ... exampleProductRequest };
+    mockedDB.update.mockResolvedValue(updatedProduct);
+    const product = await productService.update(id, exampleProductRequest);
+    expect(mockedDB.update).toHaveBeenCalledWith(id, exampleProductRequest);
+    expect(product).toEqual(updatedProduct);
+  })
+});
