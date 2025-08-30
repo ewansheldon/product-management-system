@@ -1,6 +1,6 @@
 import { ProductRequest, ProductResponse } from "../api/types";
 
-const products: ProductResponse[] = [];
+let products: ProductResponse[] = [];
 let idCounter: number = 0;
 
 export const getAll = async (): Promise<ProductResponse[]> => {
@@ -11,4 +11,14 @@ export const create = async (productRequest: ProductRequest): Promise<ProductRes
   const product: ProductResponse = { id: ++idCounter, ...productRequest };
   products.push(product);
   return product;
+};
+
+export const update = async (id: number, productRequest: ProductRequest): Promise<ProductResponse> => {
+  const newProduct = { id, ...productRequest };
+  products = products.map(product => {
+    return product.id === id ?
+      newProduct : 
+      product;
+  });
+  return newProduct;
 };
