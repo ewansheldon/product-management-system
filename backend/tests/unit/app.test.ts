@@ -35,7 +35,7 @@ describe('POST /products', () => {
   it('should handle creation error', async () => {
     const invalidProductRequest = { foo: 'bar' };
     const error = 'Missing required parameters';
-    mockedController.create.mockRejectedValue(new InvalidParamsError('Missing required parameters'));
+    mockedController.create.mockRejectedValue(new InvalidParamsError(error));
     const response = await request(app).post('/products').send(invalidProductRequest);
     expect(mockedController.create).toHaveBeenCalledWith(invalidProductRequest);
     expect(response.statusCode).toEqual(400);
@@ -45,7 +45,7 @@ describe('POST /products', () => {
 
 describe('PATCH /products/:id', () => {
   it('should update a product with the product controller', async () => {
-    const id = 1;
+    const { id } = exampleProduct;
     const updatedProductResponse = { id, ...exampleProductRequest };
     mockedController.update.mockResolvedValue(updatedProductResponse);
     const response = await request(app).patch(`/products/${id}`).send(exampleProductRequest);
@@ -55,15 +55,16 @@ describe('PATCH /products/:id', () => {
     expect(response.body).toEqual(updatedProductResponse);
   });
 
-  // it('should handle creation error', async () => {
-  //   const invalidProductRequest = { foo: 'bar' };
-  //   const error = 'Missing required parameters';
-  //   mockedController.create.mockRejectedValue(new InvalidParamsError('Missing required parameters'));
-  //   const response = await request(app).post('/products').send(invalidProductRequest);
-  //   expect(mockedController.create).toHaveBeenCalledWith(invalidProductRequest);
-  //   expect(response.statusCode).toEqual(400);
-  //   expect(response.body).toEqual({ error })
-  // });
+  it('should handle update error', async () => {
+    const { id } = exampleProduct;
+    const invalidProductRequest = { foo: 'bar' };
+    const error = 'Missing required parameters';
+    mockedController.update.mockRejectedValue(new InvalidParamsError(error));
+    const response = await request(app).patch(`/products/${id}`).send(invalidProductRequest);
+    expect(mockedController.update).toHaveBeenCalledWith(id, invalidProductRequest);
+    expect(response.statusCode).toEqual(400);
+    expect(response.body).toEqual({ error })
+  });
 });
 
 afterEach(() => {

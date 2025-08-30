@@ -33,7 +33,7 @@ describe('create product', () => {
 
 describe('update product', () => {
   it('should update a product', async () => {
-    const id = 1;
+    const { id } = exampleProduct;
     const updatedProductResponse = { id, ...exampleProductRequest };
     mockedDb.update.mockResolvedValue(updatedProductResponse);
     const response = await request(app).patch(`/products/${id}`).send(exampleProductRequest);
