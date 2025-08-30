@@ -9,8 +9,12 @@ export const getAll = async (): Promise<ProductResponse[]> => {
 };
 
 const validateTextField = (field: Field, productRequest: ProductRequest) => {
-  const value: string = productRequest[field];
-  if (value.length === 0 || value.length > 255) throw new InvalidParamsError(`Invalid ${field}`);
+  try {
+    const value: string = productRequest[field];
+    if (value.length === 0 || value.length > 255) throw new InvalidParamsError(`Invalid ${field}`);
+  } catch (e) {
+    throw new InvalidParamsError(`Invalid ${field}`)
+  }
 }
 
 const validate = (productRequest: ProductRequest): ProductRequest => {
