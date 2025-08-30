@@ -2,12 +2,13 @@ import request from 'supertest';
 import { app, server } from '../../src/api/app';
 import * as productController from '../../src/api/product.controller';
 import { exampleProduct, exampleProductRequest } from '../common';
+import { InvalidParamsError } from '../../src/api/errors';
 
 jest.mock('../../src/api/product.controller');
 const mockedController = productController as jest.Mocked<typeof productController>;
 
 beforeEach(() => {
-  mockedController.getAll.mockReturnValue(Promise.resolve([exampleProduct]));
+  mockedController.getAll.mockResolvedValue([exampleProduct]);
 });
 
 describe('GET /products', () => {
@@ -23,11 +24,22 @@ describe('GET /products', () => {
 describe('POST /products', () => {
   it('should create a product with the product controller', async () => {
     const newProductResponse = { id: 2, ...exampleProductRequest };
-    mockedController.create.mockReturnValue(Promise.resolve(newProductResponse));
+    mockedController.create.mockResolvedValue(newProductResponse);
     const response = await request(app).post('/products').send(exampleProductRequest);
+    expect(mockedController.create).toHaveBeenCalledWith(exampleProductRequest);
     expect(response.statusCode).toEqual(201);
     expect(response.headers['content-type']).toMatch(/application\/json/);
     expect(response.body).toEqual(newProductResponse);
+  });
+
+  it('should handle creation error', async () => {
+    const invalidProductRequest = { foo: 'bar' };
+    const error = 'Missing required parameters';
+    mockedController.create.mockRejectedValue(new InvalidParamsError('Missing required parameters'));
+    const response = await request(app).post('/products').send(invalidProductRequest);
+    expect(mockedController.create).toHaveBeenCalledWith(invalidProductRequest);
+    expect(response.statusCode).toEqual(400);
+    expect(response.body).toEqual({ error })
   });
 });
 

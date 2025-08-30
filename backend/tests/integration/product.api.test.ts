@@ -7,7 +7,7 @@ jest.mock('../../src/db/product.inMemory.db');
 const mockedDb = db as jest.Mocked<typeof db>;
 
 beforeEach(() => {
-  mockedDb.getAll.mockReturnValue(Promise.resolve([exampleProduct]));
+  mockedDb.getAll.mockResolvedValue([exampleProduct]);
 });
 
 describe('view products', () => {
@@ -23,9 +23,9 @@ describe('view products', () => {
 describe('create product', () => {
   it('should create a product', async () => {
     const newProductResponse = { id: 2, ...exampleProductRequest };
-    mockedDb.create.mockReturnValue(Promise.resolve(newProductResponse));
-    expect(mockedDb.create).toHaveBeenCalledWith(exampleProductRequest);
+    mockedDb.create.mockResolvedValue(newProductResponse);
     const response = await request(app).post('/products').send(exampleProductRequest);
+    expect(mockedDb.create).toHaveBeenCalledWith(exampleProductRequest);
     expect(response.statusCode).toEqual(201);
     expect(response.body).toEqual(newProductResponse);
   });
