@@ -5,7 +5,7 @@ import { exampleProduct } from '../common';
 jest.mock('../../src/db/product.inMemory.db');
 const mockedDB = productDB as jest.Mocked<typeof productDB>;
 
-beforeAll(() => {
+beforeEach(() => {
   mockedDB.getAll.mockResolvedValue([exampleProduct]);
 });
 
