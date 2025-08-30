@@ -8,7 +8,6 @@ jest.mock('../../src/api/product.service');
 const mockedService = productService as jest.Mocked<typeof productService>;
 
 beforeEach(() => {
-  console.log(2);
   mockedService.getAll.mockResolvedValue([exampleProduct]);
 });
 
