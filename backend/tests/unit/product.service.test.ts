@@ -1,5 +1,4 @@
 import * as productService from '../../src/api/product.service';
-import { ProductResponse } from '../../src/api/types';
 import * as productDB from '../../src/db/product.inMemory.db';
 import { exampleProduct, exampleProductRequest } from '../common';
 
@@ -22,7 +21,7 @@ describe('create', () => {
   it('creates the product with the db', async () => {
     const createdProduct = { ... exampleProductRequest, id: 2 };
     mockedDB.create.mockResolvedValue(createdProduct);
-    const product: ProductResponse = await productService.create(exampleProductRequest);
+    const product = await productService.create(exampleProductRequest);
     expect(mockedDB.create).toHaveBeenCalledWith(exampleProductRequest);
     expect(product).toEqual(createdProduct);
   })

@@ -8,3 +8,7 @@ export const getAll = async (): Promise<ProductResponse[]> => {
 export const create = async (productRequest: ProductRequest): Promise<ProductResponse> => {
   return await productDB.create(productRequest);
 };
+
+export const update = async (id: number, productRequest: ProductRequest): Promise<ProductResponse> => {
+  return { id, ... productRequest, };
+};
