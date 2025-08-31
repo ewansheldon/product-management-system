@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app, server } from '../../src/api/app';
 import * as db from '../../src/db/product.inMemory.db';
 import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest } from '../common';
+import path from 'path';
 
 jest.mock('../../src/db/product.inMemory.db');
 const mockedDb = db as jest.Mocked<typeof db>;
@@ -24,7 +25,11 @@ describe('create product', () => {
   it('should create a product', async () => {
     const newProductResponse = { id: 2, ...exampleCreateProductRequest };
     mockedDb.create.mockResolvedValue(newProductResponse);
-    const response = await request(app).post('/products').send(exampleCreateProductRequest);
+    const response = await request(app)
+      .post('/products')
+      .field('name', exampleCreateProductRequest.name)
+      .field('artist', exampleCreateProductRequest.artist)
+      .attach("coverArt", path.resolve(__dirname, "fixtures/test.jpg"));
     expect(mockedDb.create).toHaveBeenCalledWith(exampleCreateProductRequest);
     expect(response.statusCode).toEqual(201);
     expect(response.headers['content-type']).toMatch(/application\/json/);
