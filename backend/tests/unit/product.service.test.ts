@@ -59,3 +59,12 @@ describe('update', () => {
     expect(mockedDB.update).not.toHaveBeenCalled();
   });
 });
+
+describe('remove', () => {
+  it('deletes the product with the db', async () => {
+    const { id } = exampleProduct;
+    mockedDB.remove.mockResolvedValue();
+    await productService.remove(id);
+    expect(mockedDB.remove).toHaveBeenCalledWith(id);
+  });
+});

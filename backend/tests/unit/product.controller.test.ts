@@ -38,7 +38,7 @@ describe('update', () => {
   });
 });
 
-describe('delete', () => {
+describe('remove', () => {
   it('deletes a product with product service', async () => {
     const { id } = exampleProduct;
     mockedService.remove.mockResolvedValue();

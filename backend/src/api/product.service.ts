@@ -16,5 +16,6 @@ export const update = async (id: number, productRequest: UpdateProductRequest): 
   return await productDB.update(id, productRequest);
 };
 
-export const remove = async (_id: number) => {
+export const remove = async (id: number) => {
+  await productDB.remove(id);
 };

@@ -1,7 +1,7 @@
 import { InvalidParamsError } from "../api/errors";
 import { CreateProductRequest, ProductResponse, UpdateProductRequest } from "../api/types";
 
-const products: ProductResponse[] = [];
+let products: ProductResponse[] = [];
 let idCounter: number = 0;
 
 export const getAll = async (): Promise<ProductResponse[]> => {
@@ -22,5 +22,6 @@ export const update = async (id: number, productRequest: UpdateProductRequest): 
   return updatedProduct;
 };
 
-export const remove = async (_id: number) => {
+export const remove = async (id: number) => {
+  products = products.filter(product => product.id !== id);
 };

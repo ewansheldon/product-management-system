@@ -52,7 +52,7 @@ describe('delete product', () => {
     mockedDb.update.mockResolvedValue(updatedProductResponse);
     const response = await request(app).delete(`/products/${id}`);
     expect(mockedDb.remove).toHaveBeenCalledWith(id);
-    expect(response.statusCode).toEqual(200);
+    expect(response.statusCode).toEqual(204);
   });
 });
 
