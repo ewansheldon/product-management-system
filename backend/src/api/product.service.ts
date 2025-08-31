@@ -15,3 +15,6 @@ export const update = async (id: number, productRequest: UpdateProductRequest): 
   validateUpdate(productRequest);
   return await productDB.update(id, productRequest);
 };
+
+export const remove = async (_id: number) => {
+};

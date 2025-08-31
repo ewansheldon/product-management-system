@@ -58,10 +58,29 @@ describe('PATCH /products/:id', () => {
   it('should handle update error', async () => {
     const { id } = exampleProduct;
     const invalidProductRequest = { foo: 'bar' };
-    const error = 'Missing required parameters';
+    const error = 'Invalid parameters';
     mockedController.update.mockRejectedValue(new InvalidParamsError(error));
     const response = await request(app).patch(`/products/${id}`).send(invalidProductRequest);
     expect(mockedController.update).toHaveBeenCalledWith(id, invalidProductRequest);
+    expect(response.statusCode).toEqual(400);
+    expect(response.body).toEqual({ error })
+  });
+});
+
+describe('DELETE /products/:id', () => {
+  it('should delete a product with the product controller', async () => {
+    const { id } = exampleProduct;
+    mockedController.remove.mockResolvedValue();
+    const response = await request(app).delete(`/products/${id}`);
+    expect(mockedController.remove).toHaveBeenCalledWith(id);
+    expect(response.statusCode).toEqual(204);
+  });
+
+  it('should handle delete error', async () => {
+    const invalidID = 101;
+    const error = 'Invalid parameters';
+    mockedController.remove.mockRejectedValue(new InvalidParamsError(error));
+    const response = await request(app).delete(`/products/${invalidID}`);
     expect(response.statusCode).toEqual(400);
     expect(response.body).toEqual({ error })
   });

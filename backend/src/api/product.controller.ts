@@ -12,3 +12,7 @@ export const create = async (productRequest: CreateProductRequest): Promise<Prod
 export const update = async (id: number, productRequest: UpdateProductRequest): Promise<ProductResponse> => {
   return await productService.update(id, productRequest);
 };
+
+export const remove = async (id: number) => {
+  await productService.remove(id);
+};

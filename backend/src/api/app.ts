@@ -28,6 +28,15 @@ app.patch('/products/:id', async (req: Request, res: Response, next: NextFunctio
   }
 });
 
+app.delete('/products/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await productController.remove(Number(req.params.id));
+    res.status(204).end();
+  } catch (e) {
+    next(e);
+  }
+});
+
 app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
   if (err instanceof InvalidParamsError) {
     return res.status(400).json({ error: err.message });

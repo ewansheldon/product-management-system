@@ -37,3 +37,12 @@ describe('update', () => {
     expect(product).toEqual(updatedProduct);
   });
 });
+
+describe('delete', () => {
+  it('deletes a product with product service', async () => {
+    const { id } = exampleProduct;
+    mockedService.remove.mockResolvedValue();
+    await productController.remove(id);
+    expect(mockedService.remove).toHaveBeenCalledWith(id);
+  });
+});

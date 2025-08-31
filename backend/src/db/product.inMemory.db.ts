@@ -22,5 +22,5 @@ export const update = async (id: number, productRequest: UpdateProductRequest): 
   return updatedProduct;
 };
 
-export const deleteProduct = async (_id: number) => {
+export const remove = async (_id: number) => {
 };
