@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app, server } from '../../src/api/app';
 import * as productController from '../../src/api/product.controller';
-import { exampleProduct, exampleCreateProductRequest } from '../common';
+import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest } from '../common';
 import { InvalidParamsError } from '../../src/api/errors';
 
 jest.mock('../../src/api/product.controller');
@@ -46,10 +46,10 @@ describe('POST /products', () => {
 describe('PATCH /products/:id', () => {
   it('should update a product with the product controller', async () => {
     const { id } = exampleProduct;
-    const updatedProductResponse = { id, ...exampleCreateProductRequest };
+    const updatedProductResponse = { ...exampleProduct, ...exampleUpdateProductRequest };
     mockedController.update.mockResolvedValue(updatedProductResponse);
-    const response = await request(app).patch(`/products/${id}`).send(exampleCreateProductRequest);
-    expect(mockedController.update).toHaveBeenCalledWith(id, exampleCreateProductRequest);
+    const response = await request(app).patch(`/products/${id}`).send(exampleUpdateProductRequest);
+    expect(mockedController.update).toHaveBeenCalledWith(id, exampleUpdateProductRequest);
     expect(response.statusCode).toEqual(200);
     expect(response.headers['content-type']).toMatch(/application\/json/);
     expect(response.body).toEqual(updatedProductResponse);
