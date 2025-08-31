@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app, server } from '../../src/api/app';
 import * as productController from '../../src/api/product.controller';
-import { exampleProduct, exampleProductRequest } from '../common';
+import { exampleProduct, exampleCreateProductRequest } from '../common';
 import { InvalidParamsError } from '../../src/api/errors';
 
 jest.mock('../../src/api/product.controller');
@@ -23,10 +23,10 @@ describe('GET /products', () => {
 
 describe('POST /products', () => {
   it('should create a product with the product controller', async () => {
-    const newProductResponse = { id: 2, ...exampleProductRequest };
+    const newProductResponse = { id: 2, ...exampleCreateProductRequest };
     mockedController.create.mockResolvedValue(newProductResponse);
-    const response = await request(app).post('/products').send(exampleProductRequest);
-    expect(mockedController.create).toHaveBeenCalledWith(exampleProductRequest);
+    const response = await request(app).post('/products').send(exampleCreateProductRequest);
+    expect(mockedController.create).toHaveBeenCalledWith(exampleCreateProductRequest);
     expect(response.statusCode).toEqual(201);
     expect(response.headers['content-type']).toMatch(/application\/json/);
     expect(response.body).toEqual(newProductResponse);
@@ -46,10 +46,10 @@ describe('POST /products', () => {
 describe('PATCH /products/:id', () => {
   it('should update a product with the product controller', async () => {
     const { id } = exampleProduct;
-    const updatedProductResponse = { id, ...exampleProductRequest };
+    const updatedProductResponse = { id, ...exampleCreateProductRequest };
     mockedController.update.mockResolvedValue(updatedProductResponse);
-    const response = await request(app).patch(`/products/${id}`).send(exampleProductRequest);
-    expect(mockedController.update).toHaveBeenCalledWith(id, exampleProductRequest);
+    const response = await request(app).patch(`/products/${id}`).send(exampleCreateProductRequest);
+    expect(mockedController.update).toHaveBeenCalledWith(id, exampleCreateProductRequest);
     expect(response.statusCode).toEqual(200);
     expect(response.headers['content-type']).toMatch(/application\/json/);
     expect(response.body).toEqual(updatedProductResponse);

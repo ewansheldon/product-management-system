@@ -1,4 +1,4 @@
-import { ProductRequest, ProductResponse } from "./types";
+import { CreateProductRequest, ProductResponse } from "./types";
 import * as productService from './product.service';
 import { InvalidParamsError } from "./errors";
 
@@ -8,7 +8,7 @@ export const getAll = async (): Promise<ProductResponse[]> => {
   return await productService.getAll();
 };
 
-const validateTextField = (field: Field, productRequest: ProductRequest) => {
+const validateTextField = (field: Field, productRequest: CreateProductRequest) => {
   try {
     const value: string = productRequest[field];
     if (value.length === 0 || value.length > 255) throw new InvalidParamsError(`Invalid ${field}`);
@@ -17,16 +17,16 @@ const validateTextField = (field: Field, productRequest: ProductRequest) => {
   }
 }
 
-const validate = (productRequest: ProductRequest): ProductRequest => {
+const validate = (productRequest: CreateProductRequest): CreateProductRequest => {
   validateTextField('name', productRequest);
   validateTextField('artist', productRequest);
   return productRequest;
 }
 
-export const create = async (productRequest: ProductRequest): Promise<ProductResponse> => {
+export const create = async (productRequest: CreateProductRequest): Promise<ProductResponse> => {
   return productService.create(validate(productRequest));
 };
 
-export const update = async (id: number, productRequest: ProductRequest): Promise<ProductResponse> => {
+export const update = async (id: number, productRequest: CreateProductRequest): Promise<ProductResponse> => {
   return await productService.update(id, validate(productRequest));
 };

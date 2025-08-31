@@ -1,6 +1,6 @@
 import express, { Response, Request, NextFunction } from 'express';
 import * as productController from '../../src/api/product.controller';
-import { ProductRequest } from './types';
+import { CreateProductRequest } from './types';
 import { InvalidParamsError } from './errors';
 
 export const app = express();
@@ -14,7 +14,7 @@ app.get('/products', async (_req: Request, res: Response) => {
 
 app.post('/products', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(201).json(await productController.create(req.body as ProductRequest));
+    res.status(201).json(await productController.create(req.body as CreateProductRequest));
   } catch (e) {
     next(e);
   }
@@ -22,7 +22,7 @@ app.post('/products', async (req: Request, res: Response, next: NextFunction) =>
 
 app.patch('/products/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).json(await productController.update(Number(req.params.id), req.body as ProductRequest));
+    res.status(200).json(await productController.update(Number(req.params.id), req.body as CreateProductRequest));
   } catch (e) {
     next(e);
   }

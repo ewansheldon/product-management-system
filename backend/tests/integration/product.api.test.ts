@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app, server } from '../../src/api/app';
 import * as db from '../../src/db/product.inMemory.db';
-import { exampleProduct, exampleProductRequest } from '../common';
+import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest } from '../common';
 
 jest.mock('../../src/db/product.inMemory.db');
 const mockedDb = db as jest.Mocked<typeof db>;
@@ -22,10 +22,10 @@ describe('view products', () => {
 
 describe('create product', () => {
   it('should create a product', async () => {
-    const newProductResponse = { id: 2, ...exampleProductRequest };
+    const newProductResponse = { id: 2, ...exampleCreateProductRequest };
     mockedDb.create.mockResolvedValue(newProductResponse);
-    const response = await request(app).post('/products').send(exampleProductRequest);
-    expect(mockedDb.create).toHaveBeenCalledWith(exampleProductRequest);
+    const response = await request(app).post('/products').send(exampleCreateProductRequest);
+    expect(mockedDb.create).toHaveBeenCalledWith(exampleCreateProductRequest);
     expect(response.statusCode).toEqual(201);
     expect(response.body).toEqual(newProductResponse);
   });
@@ -34,10 +34,10 @@ describe('create product', () => {
 describe('update product', () => {
   it('should update a product', async () => {
     const { id } = exampleProduct;
-    const updatedProductResponse = { id, ...exampleProductRequest };
+    const updatedProductResponse = { ...exampleProduct, ...exampleUpdateProductRequest };
     mockedDb.update.mockResolvedValue(updatedProductResponse);
-    const response = await request(app).patch(`/products/${id}`).send(exampleProductRequest);
-    expect(mockedDb.update).toHaveBeenCalledWith(id, exampleProductRequest);
+    const response = await request(app).patch(`/products/${id}`).send(exampleCreateProductRequest);
+    expect(mockedDb.update).toHaveBeenCalledWith(id, exampleCreateProductRequest);
     expect(response.statusCode).toEqual(200);
     expect(response.body).toEqual(updatedProductResponse);
   });

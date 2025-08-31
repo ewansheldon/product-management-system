@@ -1,9 +1,14 @@
+import { InvalidParamsError } from '../../src/api/errors';
 import * as productService from '../../src/api/product.service';
 import * as productDB from '../../src/db/product.inMemory.db';
-import { exampleProduct, exampleProductRequest } from '../common';
+import * as productValidator from '../../src/api/product.validator';
+import { exampleProduct, exampleCreateProductRequest } from '../common';
+import { CreateProductRequest, UpdateProductRequest } from '../../src/api/types';
 
 jest.mock('../../src/db/product.inMemory.db');
+jest.mock('../../src/api/product.validator');
 const mockedDB = productDB as jest.Mocked<typeof productDB>;
+const mockedValidator = productValidator as jest.Mocked<typeof productValidator>;
 
 beforeEach(() => {
   mockedDB.getAll.mockResolvedValue([exampleProduct]);
@@ -19,21 +24,38 @@ describe('getAll', () => {
 
 describe('create', () => {
   it('creates the product with the db', async () => {
-    const createdProduct = { ... exampleProductRequest, id: 2 };
+    const createdProduct = { ...exampleCreateProductRequest, id: 2 };
     mockedDB.create.mockResolvedValue(createdProduct);
-    const product = await productService.create(exampleProductRequest);
-    expect(mockedDB.create).toHaveBeenCalledWith(exampleProductRequest);
+    const product = await productService.create(exampleCreateProductRequest);
+    expect(mockedDB.create).toHaveBeenCalledWith(exampleCreateProductRequest);
     expect(product).toEqual(createdProduct);
-  })
+  });
+
+  it('throws an error if params are invalid', async () => {
+    mockedValidator.validateCreate.mockImplementation(
+      (_productRequest: CreateProductRequest) => { throw new InvalidParamsError('Invalid artist'); }
+    );
+    expect(productService.create({ artist: "", name: "foo" })).rejects.toThrow(new InvalidParamsError('Invalid artist'));
+    expect(mockedDB.create).not.toHaveBeenCalled();
+  });
 });
 
 describe('update', () => {
   it('updates the product with the db', async () => {
     const { id } = exampleProduct;
-    const updatedProduct = { id, ... exampleProductRequest };
+    const updatedProduct = { id, ...exampleCreateProductRequest };
     mockedDB.update.mockResolvedValue(updatedProduct);
-    const product = await productService.update(id, exampleProductRequest);
-    expect(mockedDB.update).toHaveBeenCalledWith(id, exampleProductRequest);
+    const product = await productService.update(id, exampleCreateProductRequest);
+    expect(mockedDB.update).toHaveBeenCalledWith(id, exampleCreateProductRequest);
     expect(product).toEqual(updatedProduct);
-  })
+  });
+
+  it('throws an error if params are invalid', async () => {
+    const { id } = exampleProduct;
+    mockedValidator.validateUpdate.mockImplementation(
+      (_productRequest: UpdateProductRequest) => { throw new InvalidParamsError('Invalid artist'); }
+    );
+    expect(productService.update(id, { artist: "" })).rejects.toThrow(new InvalidParamsError('Invalid artist'));
+    expect(mockedDB.update).not.toHaveBeenCalled();
+  });
 });
