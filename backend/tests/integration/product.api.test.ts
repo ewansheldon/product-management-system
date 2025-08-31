@@ -27,6 +27,7 @@ describe('create product', () => {
     const response = await request(app).post('/products').send(exampleCreateProductRequest);
     expect(mockedDb.create).toHaveBeenCalledWith(exampleCreateProductRequest);
     expect(response.statusCode).toEqual(201);
+    expect(response.headers['content-type']).toMatch(/application\/json/);
     expect(response.body).toEqual(newProductResponse);
   });
 });
@@ -39,7 +40,19 @@ describe('update product', () => {
     const response = await request(app).patch(`/products/${id}`).send(exampleCreateProductRequest);
     expect(mockedDb.update).toHaveBeenCalledWith(id, exampleCreateProductRequest);
     expect(response.statusCode).toEqual(200);
+    expect(response.headers['content-type']).toMatch(/application\/json/);
     expect(response.body).toEqual(updatedProductResponse);
+  });
+});
+
+describe('delete product', () => {
+  it('should delete a product', async () => {
+    const { id } = exampleProduct;
+    const updatedProductResponse = { ...exampleProduct, ...exampleUpdateProductRequest };
+    mockedDb.update.mockResolvedValue(updatedProductResponse);
+    const response = await request(app).delete(`/products/${id}`);
+    expect(mockedDb.deleteProduct).toHaveBeenCalledWith(id);
+    expect(response.statusCode).toEqual(200);
   });
 });
 

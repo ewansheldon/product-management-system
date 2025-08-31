@@ -21,3 +21,6 @@ export const update = async (id: number, productRequest: UpdateProductRequest): 
   products[index] = updatedProduct;
   return updatedProduct;
 };
+
+export const deleteProduct = async (_id: number) => {
+};
