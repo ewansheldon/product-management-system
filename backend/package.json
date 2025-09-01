@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "start": "ts-node src/api/app.ts",
+        "prestart": "rm -rf src/db/uploads && mkdir src/db/uploads",
+        "start": "npm run prestart && ts-node src/api/app.ts",
         "build": "tsc",
         "serve": "node dist/index.js",
         "test": "jest"
