@@ -6,8 +6,6 @@ services:
     container_name: backend
     ports:
       - "3000:3000"
-    # volumes:
-    #   - ./backend/uploads:/app/dist/src/db/uploads
     environment:
       - NODE_ENV=production
 
