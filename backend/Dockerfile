@@ -12,6 +12,5 @@ ENTRYPOINT ["/usr/bin/tini", "--"]
 COPY --from=build /app/dist ./dist
 COPY package*.json ./
 RUN npm ci
-RUN mkdir -p dist/src/db/uploads
 EXPOSE 3000
 CMD ["node", "dist/src/api/app.js"]

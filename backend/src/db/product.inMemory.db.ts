@@ -3,6 +3,13 @@ import fs from "fs";
 import { InvalidParamsError } from "../api/errors";
 import { CreateProductRequest, ProductResponse, UpdateProductRequest } from "../api/types";
 
+const uploadDir = path.join(__dirname, ".", "uploads");
+
+if (fs.existsSync(uploadDir)) {
+  fs.rmSync(uploadDir, { recursive: true, force: true });
+}
+fs.mkdirSync(uploadDir, { recursive: true });
+
 let products: ProductResponse[] = [];
 let lastID: number = 0;
 
@@ -11,7 +18,7 @@ export const getAll = async (): Promise<ProductResponse[]> => {
 };
 
 const coverArtFilePath = (id: number): string => {
-  return path.join(__dirname, ".", "uploads", `cover-art-${id}.jpg`);
+  return path.join(uploadDir, `cover-art-${id}.jpg`);
 };
 
 const uploadCoverArt = (coverArt: Buffer, id: number): string => {
@@ -43,7 +50,7 @@ export const update = async (id: number, productRequest: UpdateProductRequest): 
 };
 
 const deleteCoverArt = (id: number) => {
-  fs.unlinkSync(coverArtFilePath(id));
+  fs.rmSync(coverArtFilePath(id));
 }
 
 export const remove = async (id: number) => {
