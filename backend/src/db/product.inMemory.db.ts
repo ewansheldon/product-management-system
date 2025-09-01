@@ -11,7 +11,7 @@ export const getAll = async (): Promise<ProductResponse[]> => {
 };
 
 const uploadCoverArt = async (coverArt: Buffer, id: number): Promise<string> => {
-  const filePath = path.join(__dirname, ".", "uploads", `coverArt_${id}.jpg`);
+  const filePath = path.join(__dirname, ".", "uploads", `cover-art-${id}.jpg`);
   fs.writeFileSync(filePath, coverArt);
   return `/products/${id}/coverArt`;
 }
@@ -32,7 +32,9 @@ export const create = async (productRequest: CreateProductRequest): Promise<Prod
 export const update = async (id: number, productRequest: UpdateProductRequest): Promise<ProductResponse> => {
   const index = products.findIndex(product => product.id === id);
   if (index < 0) throw new InvalidParamsError('Invalid ID');
+  if (productRequest.coverArt) await uploadCoverArt(productRequest.coverArt, id);
   const updatedProduct = { ...products[index], ...productRequest };
+  delete updatedProduct.coverArt;
   products[index] = updatedProduct;
   return updatedProduct;
 };

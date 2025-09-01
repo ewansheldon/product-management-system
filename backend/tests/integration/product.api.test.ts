@@ -46,10 +46,14 @@ describe('create product', () => {
 describe('update product', () => {
   it('should update a product', async () => {
     const { id } = exampleProduct;
-    const updatedProductResponse = { ...exampleProduct, ...exampleUpdateProductRequest };
+    const updatedProductResponse = { 
+      ...exampleProduct,
+      name: exampleUpdateProductRequest.name!,
+    };
     mockedDb.update.mockResolvedValue(updatedProductResponse);
     const response = await request(app).patch(`/products/${id}`)
-      .send(exampleUpdateProductRequest);
+      .field('name', exampleUpdateProductRequest.name!)
+      .attach('coverArt', path.join(__dirname, '../fixtures/Ys.jpg'));
     expect(mockedDb.update).toHaveBeenCalledWith(id, exampleUpdateProductRequest);
     expect(response.statusCode).toEqual(200);
     expect(response.headers['content-type']).toMatch(/application\/json/);

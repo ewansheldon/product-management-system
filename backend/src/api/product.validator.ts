@@ -22,6 +22,7 @@ export const validateCreate = (productRequest: CreateProductRequest) => {
   validateLength(productRequest.name, 'name');
   if (!productRequest.artist) throw new InvalidParamsError('Invalid artist');
   validateLength(productRequest.artist, 'artist');
+  if (!productRequest.coverArt) throw new InvalidParamsError('Invalid cover art');
 };
 
 export const validateUpdate = (productRequest: UpdateProductRequest) => {

@@ -4,7 +4,7 @@
     "main": "index.js",
     "scripts": {
         "prestart": "rm -rf src/db/uploads && mkdir src/db/uploads",
-        "start": "npm run prestart && ts-node src/api/app.ts",
+        "start": "ts-node src/api/app.ts",
         "build": "tsc",
         "serve": "node dist/index.js",
         "test": "jest"

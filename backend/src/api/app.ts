@@ -1,7 +1,7 @@
 import express, { Response, Request, NextFunction } from 'express';
-import multer from "multer";
+import multer, { FileFilterCallback, MulterError } from "multer";
 import * as productController from '../../src/api/product.controller';
-import { CreateProductRequest } from './types';
+import { CreateProductRequest, UpdateProductRequest } from './types';
 import { InvalidParamsError } from './errors';
 
 export const app = express();
@@ -9,7 +9,8 @@ const port = process.env.PORT || 3000;
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  fileFilter: (_req, file, cb) => {
+  limits: { fileSize: 2 * 1024 * 1024 },
+  fileFilter: (_req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
     if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
       cb(null, true);
     } else {
@@ -36,9 +37,13 @@ app.post('/products', upload.single('coverArt'), async (req: Request, res: Respo
   }
 });
 
-app.patch('/products/:id', async (req: Request, res: Response, next: NextFunction) => {
+app.patch('/products/:id', upload.single('coverArt'), async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).json(await productController.update(Number(req.params.id), req.body as CreateProductRequest));
+    const productRequest: UpdateProductRequest = {
+      ... req.body,
+      coverArt: req.file?.buffer
+    }
+    res.status(200).json(await productController.update(Number(req.params.id), productRequest));
   } catch (e) {
     next(e);
   }
@@ -55,6 +60,9 @@ app.delete('/products/:id', async (req: Request, res: Response, next: NextFuncti
 
 app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
   if (err instanceof InvalidParamsError) {
+    return res.status(400).json({ error: err.message });
+  }
+  if (err instanceof MulterError) {
     return res.status(400).json({ error: err.message });
   }
   console.log(err)

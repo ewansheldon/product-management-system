@@ -25,7 +25,7 @@ describe('GET /products', () => {
 describe('POST /products', () => {
   it('should create a product with the product controller', async () => {
     const nextID = 2;
-    const newProductResponse = { 
+    const newProductResponse = {
       id: nextID,
       name: exampleCreateProductRequest.name,
       artist: exampleCreateProductRequest.artist,
@@ -50,27 +50,43 @@ describe('POST /products', () => {
     const response = await request(app).post('/products').send(invalidProductRequest);
     expect(mockedController.create).toHaveBeenCalledWith(invalidProductRequest);
     expect(response.statusCode).toEqual(400);
-    expect(response.body).toEqual({ error })
+    expect(response.body).toEqual({ error });
   });
 
-  it('should validate that cover art is png or jpeg', async () => {
-    const response = await request(app)
+  it('should validate that cover art is correct file type and size', async () => {
+    let response = await request(app)
       .post('/products')
       .field('name', exampleCreateProductRequest.name)
       .field('artist', exampleCreateProductRequest.artist)
       .attach('coverArt', path.join(__dirname, '../fixtures/exampleData.ts'));
-      expect(response.statusCode).toEqual(400);
-      const error = 'Invalid cover art file type';
-      expect(response.body).toEqual({ error })
+    expect(response.statusCode).toEqual(400);
+    let error = 'Invalid cover art file type';
+    expect(response.body).toEqual({ error });
+
+    const bigFile = Buffer.alloc(3 * 1024 * 1024, "a");
+    response = await request(app)
+      .post('/products')
+      .field('name', exampleCreateProductRequest.name)
+      .field('artist', exampleCreateProductRequest.artist)
+      .attach("coverArt", bigFile, { filename: "big.jpg", contentType: "image/jpeg" });
+    expect(response.statusCode).toEqual(400);
+    error = 'File too large';
+    expect(response.body).toEqual({ error });
   });
 });
 
 describe('PATCH /products/:id', () => {
   it('should update a product with the product controller', async () => {
     const { id } = exampleProduct;
-    const updatedProductResponse = { ...exampleProduct, ... exampleUpdateProductRequest };
+    const updatedProductResponse = { 
+      ...exampleProduct,
+      name: exampleUpdateProductRequest.name!
+    };
     mockedController.update.mockResolvedValue(updatedProductResponse);
-    const response = await request(app).patch(`/products/${id}`).send(exampleUpdateProductRequest);
+    const response = await request(app)
+      .patch(`/products/${id}`)
+      .field('name', exampleUpdateProductRequest.name!)
+      .attach('coverArt', path.join(__dirname, '../fixtures/Ys.jpg'));
     expect(mockedController.update).toHaveBeenCalledWith(id, exampleUpdateProductRequest);
     expect(response.statusCode).toEqual(200);
     expect(response.headers['content-type']).toMatch(/application\/json/);
@@ -85,7 +101,7 @@ describe('PATCH /products/:id', () => {
     const response = await request(app).patch(`/products/${id}`).send(invalidProductRequest);
     expect(mockedController.update).toHaveBeenCalledWith(id, invalidProductRequest);
     expect(response.statusCode).toEqual(400);
-    expect(response.body).toEqual({ error })
+    expect(response.body).toEqual({ error });
   });
 });
 
@@ -104,7 +120,7 @@ describe('DELETE /products/:id', () => {
     mockedController.remove.mockRejectedValue(new InvalidParamsError(error));
     const response = await request(app).delete(`/products/${invalidID}`);
     expect(response.statusCode).toEqual(400);
-    expect(response.body).toEqual({ error })
+    expect(response.body).toEqual({ error });
   });
 });
 
