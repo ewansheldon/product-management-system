@@ -1,7 +1,7 @@
 import { InvalidParamsError } from "./errors";
 import { CreateProductRequest, UpdateProductRequest } from "./types";
 
-const acceptedFields:string[] = [ 'name', 'artist' ];
+const acceptedFields:string[] = [ 'name', 'artist', 'coverArt' ];
 
 const acceptedField = (field: string): boolean => {
   return acceptedFields.includes(field);

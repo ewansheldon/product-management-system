@@ -15,12 +15,13 @@ describe('validateCreate', () => {
   });
 
   it('throws an error if text parameters length is invalid', () => {
+    const exampleParams = { name: 'foo', artist: 'bar', coverArt: Buffer.from('')};
     let invalidText = '';
-    expect(() => productValidator.validateCreate({name: invalidText, artist: "foo"})).toThrow(new InvalidParamsError('Invalid name'));
-    expect(() => productValidator.validateCreate({name: "foo", artist: invalidText})).toThrow(new InvalidParamsError('Invalid artist'));
+    expect(() => productValidator.validateCreate({ ... exampleParams, name: invalidText })).toThrow(new InvalidParamsError('Invalid name'));
+    expect(() => productValidator.validateCreate({ ... exampleParams, artist: invalidText })).toThrow(new InvalidParamsError('Invalid artist'));
     invalidText = 'x'.repeat(256);
-    expect(() => productValidator.validateCreate({name: invalidText, artist: "foo"})).toThrow(new InvalidParamsError('Invalid name'));
-    expect(() => productValidator.validateCreate({name: "foo", artist: invalidText})).toThrow(new InvalidParamsError('Invalid artist'));
+    expect(() => productValidator.validateCreate({ ... exampleParams, name: invalidText })).toThrow(new InvalidParamsError('Invalid name'));
+    expect(() => productValidator.validateCreate({ ... exampleParams, artist: invalidText })).toThrow(new InvalidParamsError('Invalid artist'));
   });
 });
 

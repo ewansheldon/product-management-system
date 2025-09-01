@@ -1,15 +1,30 @@
+import path from "path";
+import fs from "fs";
 import { InvalidParamsError } from "../api/errors";
 import { CreateProductRequest, ProductResponse, UpdateProductRequest } from "../api/types";
 
 let products: ProductResponse[] = [];
-let idCounter: number = 0;
+let lastID: number = 0;
 
 export const getAll = async (): Promise<ProductResponse[]> => {
   return products;
 };
 
+const uploadCoverArt = async (coverArt: Buffer, id: number): Promise<string> => {
+  const filePath = path.join(__dirname, ".", "uploads", `coverArt_${id}.jpg`);
+  fs.writeFileSync(filePath, coverArt);
+  return `/products/${id}/coverArt`;
+}
+
 export const create = async (productRequest: CreateProductRequest): Promise<ProductResponse> => {
-  const product: ProductResponse = { id: ++idCounter, ...productRequest };
+  const id = ++lastID;
+  const coverArtURL = await uploadCoverArt(productRequest.coverArt, id);
+  const product: ProductResponse = {
+    id,
+    name: productRequest.name,
+    artist: productRequest.artist,
+    coverArtURL
+  };
   products.push(product);
   return product;
 };

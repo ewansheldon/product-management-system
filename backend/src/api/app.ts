@@ -1,4 +1,5 @@
 import express, { Response, Request, NextFunction } from 'express';
+import multer from "multer";
 import * as productController from '../../src/api/product.controller';
 import { CreateProductRequest } from './types';
 import { InvalidParamsError } from './errors';
@@ -6,15 +7,21 @@ import { InvalidParamsError } from './errors';
 export const app = express();
 const port = process.env.PORT || 3000;
 
+const upload = multer({ storage: multer.memoryStorage() });
+
 app.use(express.json());
 
 app.get('/products', async (_req: Request, res: Response) => {
   res.json(await productController.getAll());
 });
 
-app.post('/products', async (req: Request, res: Response, next: NextFunction) => {
+app.post('/products', upload.single('coverArt'), async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(201).json(await productController.create(req.body as CreateProductRequest));
+    const productRequest: CreateProductRequest = {
+      ... req.body,
+      coverArt: req.file?.buffer
+    }
+    res.status(201).json(await productController.create(productRequest));
   } catch (e) {
     next(e);
   }

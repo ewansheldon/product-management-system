@@ -2,7 +2,7 @@ import { InvalidParamsError } from '../../src/api/errors';
 import * as productService from '../../src/api/product.service';
 import * as productDB from '../../src/db/product.inMemory.db';
 import * as productValidator from '../../src/api/product.validator';
-import { exampleProduct, exampleCreateProductRequest } from '../common';
+import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest } from '../fixtures/exampleData';
 import { CreateProductRequest, UpdateProductRequest } from '../../src/api/types';
 
 jest.mock('../../src/db/product.inMemory.db');
@@ -24,7 +24,13 @@ describe('getAll', () => {
 
 describe('create', () => {
   it('creates the product with the db', async () => {
-    const createdProduct = { ...exampleCreateProductRequest, id: 2 };
+    const id = 2;
+    const createdProduct = { 
+      id,
+      name: exampleCreateProductRequest.name,  
+      artist: exampleCreateProductRequest.artist,
+      coverArtURL: `/products/${id}/coverArt`
+    };
     mockedDB.create.mockResolvedValue(createdProduct);
     const product = await productService.create(exampleCreateProductRequest);
     expect(mockedDB.create).toHaveBeenCalledWith(exampleCreateProductRequest);
@@ -35,7 +41,7 @@ describe('create', () => {
     mockedValidator.validateCreate.mockImplementation(
       (_productRequest: CreateProductRequest) => { throw new InvalidParamsError('Invalid artist'); }
     );
-    expect(productService.create({ artist: "", name: "foo" })).rejects.toThrow(new InvalidParamsError('Invalid artist'));
+    expect(productService.create({ artist: "", name: "foo", coverArt: Buffer.from('') })).rejects.toThrow(new InvalidParamsError('Invalid artist'));
     expect(mockedDB.create).not.toHaveBeenCalled();
   });
 });
@@ -43,10 +49,14 @@ describe('create', () => {
 describe('update', () => {
   it('updates the product with the db', async () => {
     const { id } = exampleProduct;
-    const updatedProduct = { id, ...exampleCreateProductRequest };
+    const updatedProduct = { 
+      ... exampleProduct,
+      ... exampleUpdateProductRequest,
+      coverArtURL: `/products/${id}/coverArt`
+    };
     mockedDB.update.mockResolvedValue(updatedProduct);
-    const product = await productService.update(id, exampleCreateProductRequest);
-    expect(mockedDB.update).toHaveBeenCalledWith(id, exampleCreateProductRequest);
+    const product = await productService.update(id, exampleUpdateProductRequest);
+    expect(mockedDB.update).toHaveBeenCalledWith(id, exampleUpdateProductRequest);
     expect(product).toEqual(updatedProduct);
   });
 

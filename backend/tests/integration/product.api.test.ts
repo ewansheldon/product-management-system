@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app, server } from '../../src/api/app';
 import * as db from '../../src/db/product.inMemory.db';
-import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest } from '../common';
+import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest, coverArtURLFor } from '../fixtures/exampleData';
 import path from 'path';
 
 jest.mock('../../src/db/product.inMemory.db');
@@ -23,13 +23,19 @@ describe('view products', () => {
 
 describe('create product', () => {
   it('should create a product', async () => {
-    const newProductResponse = { id: 2, ...exampleCreateProductRequest };
+    const nextID = 2;
+    const newProductResponse = {
+      id: nextID,
+      name: exampleCreateProductRequest.name,
+      artist: exampleCreateProductRequest.artist,
+      coverArtURL: coverArtURLFor(nextID)
+    };
     mockedDb.create.mockResolvedValue(newProductResponse);
     const response = await request(app)
       .post('/products')
       .field('name', exampleCreateProductRequest.name)
       .field('artist', exampleCreateProductRequest.artist)
-      .attach("coverArt", path.resolve(__dirname, "fixtures/test.jpg"));
+      .attach('coverArt', path.join(__dirname, '../fixtures/Love-Is-Overtaking-Me.jpg'));
     expect(mockedDb.create).toHaveBeenCalledWith(exampleCreateProductRequest);
     expect(response.statusCode).toEqual(201);
     expect(response.headers['content-type']).toMatch(/application\/json/);
@@ -42,8 +48,9 @@ describe('update product', () => {
     const { id } = exampleProduct;
     const updatedProductResponse = { ...exampleProduct, ...exampleUpdateProductRequest };
     mockedDb.update.mockResolvedValue(updatedProductResponse);
-    const response = await request(app).patch(`/products/${id}`).send(exampleCreateProductRequest);
-    expect(mockedDb.update).toHaveBeenCalledWith(id, exampleCreateProductRequest);
+    const response = await request(app).patch(`/products/${id}`)
+      .send(exampleUpdateProductRequest);
+    expect(mockedDb.update).toHaveBeenCalledWith(id, exampleUpdateProductRequest);
     expect(response.statusCode).toEqual(200);
     expect(response.headers['content-type']).toMatch(/application\/json/);
     expect(response.body).toEqual(updatedProductResponse);

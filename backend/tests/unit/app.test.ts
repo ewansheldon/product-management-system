@@ -1,8 +1,9 @@
 import request from 'supertest';
 import { app, server } from '../../src/api/app';
 import * as productController from '../../src/api/product.controller';
-import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest } from '../common';
+import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest, coverArtURLFor } from '../fixtures/exampleData';
 import { InvalidParamsError } from '../../src/api/errors';
+import path from 'path';
 
 jest.mock('../../src/api/product.controller');
 const mockedController = productController as jest.Mocked<typeof productController>;
@@ -23,9 +24,19 @@ describe('GET /products', () => {
 
 describe('POST /products', () => {
   it('should create a product with the product controller', async () => {
-    const newProductResponse = { id: 2, ...exampleCreateProductRequest };
+    const nextID = 2;
+    const newProductResponse = { 
+      id: nextID,
+      name: exampleCreateProductRequest.name,
+      artist: exampleCreateProductRequest.artist,
+      coverArtURL: coverArtURLFor(nextID)
+    };
     mockedController.create.mockResolvedValue(newProductResponse);
-    const response = await request(app).post('/products').send(exampleCreateProductRequest);
+    const response = await request(app)
+      .post('/products')
+      .field('name', exampleCreateProductRequest.name)
+      .field('artist', exampleCreateProductRequest.artist)
+      .attach('coverArt', path.join(__dirname, '../fixtures/Love-Is-Overtaking-Me.jpg'));
     expect(mockedController.create).toHaveBeenCalledWith(exampleCreateProductRequest);
     expect(response.statusCode).toEqual(201);
     expect(response.headers['content-type']).toMatch(/application\/json/);
@@ -46,7 +57,7 @@ describe('POST /products', () => {
 describe('PATCH /products/:id', () => {
   it('should update a product with the product controller', async () => {
     const { id } = exampleProduct;
-    const updatedProductResponse = { ...exampleProduct, ...exampleUpdateProductRequest };
+    const updatedProductResponse = { ...exampleProduct, ... exampleUpdateProductRequest };
     mockedController.update.mockResolvedValue(updatedProductResponse);
     const response = await request(app).patch(`/products/${id}`).send(exampleUpdateProductRequest);
     expect(mockedController.update).toHaveBeenCalledWith(id, exampleUpdateProductRequest);
