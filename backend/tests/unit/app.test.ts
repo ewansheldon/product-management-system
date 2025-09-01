@@ -52,6 +52,17 @@ describe('POST /products', () => {
     expect(response.statusCode).toEqual(400);
     expect(response.body).toEqual({ error })
   });
+
+  it('should validate that cover art is png or jpeg', async () => {
+    const response = await request(app)
+      .post('/products')
+      .field('name', exampleCreateProductRequest.name)
+      .field('artist', exampleCreateProductRequest.artist)
+      .attach('coverArt', path.join(__dirname, '../fixtures/exampleData.ts'));
+      expect(response.statusCode).toEqual(400);
+      const error = 'Invalid cover art file type';
+      expect(response.body).toEqual({ error })
+  });
 });
 
 describe('PATCH /products/:id', () => {

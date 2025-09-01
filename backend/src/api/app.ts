@@ -7,7 +7,16 @@ import { InvalidParamsError } from './errors';
 export const app = express();
 const port = process.env.PORT || 3000;
 
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+      cb(null, true);
+    } else {
+      cb(new InvalidParamsError("Invalid cover art file type"));
+    }
+  },
+});
 
 app.use(express.json());
 
@@ -48,6 +57,7 @@ app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
   if (err instanceof InvalidParamsError) {
     return res.status(400).json({ error: err.message });
   }
+  console.log(err)
   next(err);
 })
 
