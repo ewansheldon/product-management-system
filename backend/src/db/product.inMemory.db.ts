@@ -52,5 +52,9 @@ export const remove = async (id: number) => {
 };
 
 export const getProductCoverArt = (id: number): Buffer => {
-  return fs.readFileSync(coverArtFilePath(id));
+  try {
+    return fs.readFileSync(coverArtFilePath(id));
+  } catch(e) {
+    throw new InvalidParamsError('Invalid product ID');
+  }
 }
