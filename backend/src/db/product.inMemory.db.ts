@@ -10,11 +10,14 @@ export const getAll = async (): Promise<ProductResponse[]> => {
   return products;
 };
 
-const uploadCoverArt = async (coverArt: Buffer, id: number): Promise<string> => {
-  const filePath = path.join(__dirname, ".", "uploads", `cover-art-${id}.jpg`);
-  fs.writeFileSync(filePath, coverArt);
+const coverArtFilePath = (id: number): string => {
+  return path.join(__dirname, ".", "uploads", `cover-art-${id}.jpg`);
+};
+
+const uploadCoverArt = (coverArt: Buffer, id: number): string => {
+  fs.writeFileSync(coverArtFilePath(id), coverArt);
   return `/products/${id}/coverArt`;
-}
+};
 
 export const create = async (productRequest: CreateProductRequest): Promise<ProductResponse> => {
   const id = ++lastID;
@@ -39,6 +42,15 @@ export const update = async (id: number, productRequest: UpdateProductRequest): 
   return updatedProduct;
 };
 
+const deleteCoverArt = (id: number) => {
+  fs.unlinkSync(coverArtFilePath(id));
+}
+
 export const remove = async (id: number) => {
   products = products.filter(product => product.id !== id);
+  deleteCoverArt(id);
 };
+
+export const getProductCoverArt = (id: number): Buffer => {
+  return fs.readFileSync(coverArtFilePath(id));
+}

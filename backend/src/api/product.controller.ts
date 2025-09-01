@@ -16,3 +16,7 @@ export const update = async (id: number, productRequest: UpdateProductRequest): 
 export const remove = async (id: number) => {
   await productService.remove(id);
 };
+
+export const getProductCoverArt = (id: number): Buffer => {
+  return productService.getProductCoverArt(id);
+}

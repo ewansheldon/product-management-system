@@ -28,9 +28,9 @@ app.get('/products', async (_req: Request, res: Response) => {
 app.post('/products', upload.single('coverArt'), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const productRequest: CreateProductRequest = {
-      ... req.body,
+      ...req.body,
       coverArt: req.file?.buffer
-    }
+    };
     res.status(201).json(await productController.create(productRequest));
   } catch (e) {
     next(e);
@@ -40,9 +40,9 @@ app.post('/products', upload.single('coverArt'), async (req: Request, res: Respo
 app.patch('/products/:id', upload.single('coverArt'), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const productRequest: UpdateProductRequest = {
-      ... req.body,
+      ...req.body,
       coverArt: req.file?.buffer
-    }
+    };
     res.status(200).json(await productController.update(Number(req.params.id), productRequest));
   } catch (e) {
     next(e);
@@ -58,6 +58,13 @@ app.delete('/products/:id', async (req: Request, res: Response, next: NextFuncti
   }
 });
 
+app.get('/products/:id/coverArt', async (req: Request, res: Response) => {
+  const coverArt = productController.getProductCoverArt(Number(req.params.id));
+
+  res.setHeader('Content-Type', 'image/jpeg');
+  res.send(coverArt);
+});
+
 app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
   if (err instanceof InvalidParamsError) {
     return res.status(400).json({ error: err.message });
@@ -65,9 +72,9 @@ app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
   if (err instanceof MulterError) {
     return res.status(400).json({ error: err.message });
   }
-  console.log(err)
+  console.log(err);
   next(err);
-})
+});
 
 export const server = app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
