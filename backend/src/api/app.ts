@@ -7,6 +7,8 @@ import { InvalidParamsError } from './errors';
 export const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(express.json());
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 2 * 1024 * 1024 },
@@ -18,8 +20,6 @@ const upload = multer({
     }
   },
 });
-
-app.use(express.json());
 
 app.get('/products', async (_req: Request, res: Response) => {
   res.json(await productController.getAll());
