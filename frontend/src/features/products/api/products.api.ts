@@ -4,6 +4,6 @@ import { Product } from "../../../types";
 
 const productsURL = `${API_BASE_URL}/products`;
 
-export async function getProducts(): Promise<Product[]> {
+export const getProducts = async (): Promise<Product[]> => {
   return await fetchJson(productsURL)
 }
