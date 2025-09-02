@@ -1,5 +1,5 @@
 import { Product } from "../../../types";
-import { imgAlt, imgSrc } from "../utils/products.utils";
+import { coverArtAltText, coverArtSrc } from "../utils/products.utils";
 
 interface ProductItemProps {
   product: Product
@@ -8,7 +8,7 @@ interface ProductItemProps {
 const ProductItem = ({product}: ProductItemProps) => {
   return (
     <div>
-      <img src={imgSrc(product)} alt={imgAlt(product)} />
+      <img src={coverArtSrc(product)} alt={coverArtAltText(product)} />
       <p role="product-name">{product.name}</p>
       <p role="product-artist">{product.artist}</p>
     </div>
