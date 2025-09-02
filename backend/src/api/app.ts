@@ -3,11 +3,14 @@ import multer, { FileFilterCallback, MulterError } from "multer";
 import * as productController from './product/product.controller';
 import { CreateProductRequest, UpdateProductRequest } from './types';
 import { InvalidParamsError } from './errors';
+import cors from "cors";
 
 export const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.use(cors({ origin: "http://localhost:5173" }));
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -72,7 +75,6 @@ app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
   if (err instanceof MulterError) {
     return res.status(400).json({ error: err.message });
   }
-  console.log(err);
   next(err);
 });
 
