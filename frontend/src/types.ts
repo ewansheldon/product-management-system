@@ -1,8 +1,8 @@
 export interface Product {
-  id: string
+  id: number
   name: string
   artist: string
-  coverArtUrl: string
+  coverArtURL: string
 }
 
 export interface CreateProductRequest {

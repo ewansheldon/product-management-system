@@ -1,8 +1,9 @@
 import './App.css'
+import Products from './features/products/Products';
 
 function App() {
   return (
-    <h1>products</h1>
+    <Products />
   )
 }
 
