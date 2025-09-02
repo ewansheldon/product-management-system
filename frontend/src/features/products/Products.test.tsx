@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import Products from './Products';
 import * as api from './api/products.api';
 import { act } from 'react';
@@ -30,4 +30,11 @@ test('shows the list of products', async () => {
 
   expect(screen.getByAltText(`Cover art for ${exampleProducts[0].name} by ${exampleProducts[0].artist}`)).toBeInTheDocument();
   expect(screen.getByAltText(`Cover art for ${exampleProducts[1].name} by ${exampleProducts[1].artist}`)).toBeInTheDocument();
+});
+
+test('creates a product', async () => {
+  await act(async () => render(<Products />));
+
+  fireEvent.click(screen.getByRole('button'));
+  expect(screen.getByRole('create-product-modal')).toBeInTheDocument();
 });
