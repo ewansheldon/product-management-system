@@ -7,28 +7,23 @@
             "ESNext"
         ],
         "module": "ESNext",
-        "moduleResolution": "Node",
+        "moduleResolution": "bundler",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "allowJs": true,
         "isolatedModules": true,
         "jsx": "react-jsx",
+        "noEmit": true,
+        "allowImportingTsExtensions": true,
         "types": [
             "jest",
             "@testing-library/jest-dom"
-        ]
+        ],
+        "tsBuildInfoFile": ".tsbuildinfo"
     },
     "include": [
         "src",
         "tests"
-    ],
-    "references": [
-        {
-            "path": "./tsconfig.node.json"
-        },
-        {
-            "path": "./tsconfig.app.json"
-        }
     ]
 }
