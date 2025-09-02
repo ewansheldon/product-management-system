@@ -12,7 +12,7 @@ beforeEach(() => {
 });
 
 test('shows the list of products', async () => {
-  await act(async () => render(<Products/>));
+  await act(async () => render(<Products />));
 
   expect(screen.getByRole('heading')).toHaveTextContent('Products');
   expect(screen.getByRole('button')).toHaveTextContent('Create new product');
@@ -27,7 +27,7 @@ test('shows the list of products', async () => {
   expect(productArtists).toHaveLength(exampleProducts.length);
   expect(productArtists[0]).toHaveTextContent(exampleProducts[0].artist);
   expect(productArtists[1]).toHaveTextContent(exampleProducts[1].artist);
-  
+
   expect(screen.getByAltText(`Cover art for ${exampleProducts[0].name} by ${exampleProducts[0].artist}`)).toBeInTheDocument();
   expect(screen.getByAltText(`Cover art for ${exampleProducts[1].name} by ${exampleProducts[1].artist}`)).toBeInTheDocument();
-})
+});
