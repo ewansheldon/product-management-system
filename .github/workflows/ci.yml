@@ -21,8 +21,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22.19
           cache: npm
+          cache-dependency-path: './backend/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
@@ -47,8 +48,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22.19
           cache: npm
+          cache-dependency-path: './backend/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
@@ -58,3 +60,16 @@ jobs:
 
       - name: Run tests
         run: npm test -- --coverage
+
+  docker:
+    name: Docker build check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build backend Docker image
+        run: docker build -t backend-test ./backend
+
+      - name: Build frontend Docker image
+        run: docker build -t frontend-test ./frontend
