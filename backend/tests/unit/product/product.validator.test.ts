@@ -1,6 +1,6 @@
-import { InvalidParamsError } from '../../src/api/errors';
-import * as productValidator from '../../src/api/product.validator';
-import { exampleCreateProductRequest } from '../fixtures/exampleData';
+import { InvalidParamsError } from '../../../src/api/errors';
+import * as productValidator from '../../../src/api/product/product.validator';
+import { exampleCreateProductRequest } from '../../fixtures/exampleData';
 
 describe('validateCreate', () => {
   it('throws an error if there are unexpected parameters', () => {

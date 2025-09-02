@@ -1,6 +1,6 @@
 import express, { Response, Request, NextFunction } from 'express';
 import multer, { FileFilterCallback, MulterError } from "multer";
-import * as productController from '../../src/api/product.controller';
+import * as productController from './product/product.controller';
 import { CreateProductRequest, UpdateProductRequest } from './types';
 import { InvalidParamsError } from './errors';
 

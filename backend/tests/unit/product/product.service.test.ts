@@ -1,12 +1,12 @@
-import { InvalidParamsError } from '../../src/api/errors';
-import * as productService from '../../src/api/product.service';
-import * as productDB from '../../src/db/product.inMemory.db';
-import * as productValidator from '../../src/api/product.validator';
-import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest } from '../fixtures/exampleData';
-import { CreateProductRequest, UpdateProductRequest } from '../../src/api/types';
+import { InvalidParamsError } from '../../../src/api/errors';
+import * as productService from '../../../src/api/product/product.service';
+import * as productDB from '../../../src/db/product.inMemory.db';
+import * as productValidator from '../../../src/api/product/product.validator';
+import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest } from '../../fixtures/exampleData';
+import { CreateProductRequest, UpdateProductRequest } from '../../../src/api/types';
 
-jest.mock('../../src/db/product.inMemory.db');
-jest.mock('../../src/api/product.validator');
+jest.mock('../../../src/db/product.inMemory.db');
+jest.mock('../../../src/api/product/product.validator');
 const mockedDB = productDB as jest.Mocked<typeof productDB>;
 const mockedValidator = productValidator as jest.Mocked<typeof productValidator>;
 

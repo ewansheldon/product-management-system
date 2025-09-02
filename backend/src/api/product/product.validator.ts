@@ -1,5 +1,5 @@
-import { InvalidParamsError } from "./errors";
-import { CreateProductRequest, UpdateProductRequest } from "./types";
+import { InvalidParamsError } from "../errors";
+import { CreateProductRequest, UpdateProductRequest } from "../types";
 
 const acceptedFields:string[] = [ 'name', 'artist', 'coverArt' ];
 

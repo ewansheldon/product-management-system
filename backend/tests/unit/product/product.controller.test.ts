@@ -1,8 +1,8 @@
-import * as productController from '../../src/api/product.controller';
-import * as productService from '../../src/api/product.service';
-import { exampleProduct, exampleCreateProductRequest, coverArtURLFor, exampleUpdateProductRequest } from '../fixtures/exampleData';
+import * as productController from '../../../src/api/product/product.controller';
+import * as productService from '../../../src/api/product/product.service';
+import { exampleProduct, exampleCreateProductRequest, coverArtURLFor, exampleUpdateProductRequest } from '../../fixtures/exampleData';
 
-jest.mock('../../src/api/product.service');
+jest.mock('../../../src/api/product/product.service');
 const mockedService = productService as jest.Mocked<typeof productService>;
 
 beforeEach(() => {

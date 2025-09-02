@@ -1,11 +1,11 @@
 import request from 'supertest';
-import { app, server } from '../../src/api/app';
-import * as productController from '../../src/api/product.controller';
-import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest, coverArtURLFor } from '../fixtures/exampleData';
-import { InvalidParamsError } from '../../src/api/errors';
+import { app, server } from '../../../src/api/app';
+import * as productController from '../../../src/api/product/product.controller';
+import { exampleProduct, exampleCreateProductRequest, exampleUpdateProductRequest, coverArtURLFor } from '../../fixtures/exampleData';
+import { InvalidParamsError } from '../../../src/api/errors';
 import path from 'path';
 
-jest.mock('../../src/api/product.controller');
+jest.mock('../../../src/api/product/product.controller');
 const mockedController = productController as jest.Mocked<typeof productController>;
 
 beforeEach(() => {
@@ -36,7 +36,7 @@ describe('POST /products', () => {
       .post('/products')
       .field('name', exampleCreateProductRequest.name)
       .field('artist', exampleCreateProductRequest.artist)
-      .attach('coverArt', path.join(__dirname, '../fixtures/Love-Is-Overtaking-Me.jpg'));
+      .attach('coverArt', path.join(__dirname, '../../fixtures/Love-Is-Overtaking-Me.jpg'));
     expect(mockedController.create).toHaveBeenCalledWith(exampleCreateProductRequest);
     expect(response.statusCode).toEqual(201);
     expect(response.headers['content-type']).toMatch(/application\/json/);
@@ -58,7 +58,7 @@ describe('POST /products', () => {
       .post('/products')
       .field('name', exampleCreateProductRequest.name)
       .field('artist', exampleCreateProductRequest.artist)
-      .attach('coverArt', path.join(__dirname, '../fixtures/exampleData.ts'));
+      .attach('coverArt', path.join(__dirname, '../../fixtures/exampleData.ts'));
     expect(response.statusCode).toEqual(400);
     let error = 'Invalid cover art file type';
     expect(response.body).toEqual({ error });
@@ -86,7 +86,7 @@ describe('PATCH /products/:id', () => {
     const response = await request(app)
       .patch(`/products/${id}`)
       .field('name', exampleUpdateProductRequest.name!)
-      .attach('coverArt', path.join(__dirname, '../fixtures/Ys.jpg'));
+      .attach('coverArt', path.join(__dirname, '../../fixtures/Ys.jpg'));
     expect(mockedController.update).toHaveBeenCalledWith(id, exampleUpdateProductRequest);
     expect(response.statusCode).toEqual(200);
     expect(response.headers['content-type']).toMatch(/application\/json/);

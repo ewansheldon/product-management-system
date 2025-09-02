@@ -1,4 +1,4 @@
-import { CreateProductRequest, ProductResponse, UpdateProductRequest } from "./types";
+import { CreateProductRequest, ProductResponse, UpdateProductRequest } from "../types";
 import * as productService from './product.service';
 
 export const getAll = async (): Promise<ProductResponse[]> => {

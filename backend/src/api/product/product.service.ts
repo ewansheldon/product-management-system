@@ -1,6 +1,6 @@
-import { CreateProductRequest, ProductResponse, UpdateProductRequest } from "./types";
-import * as productDB from '../db/product.inMemory.db';
-import { validateCreate, validateUpdate } from '../api/product.validator';
+import { CreateProductRequest, ProductResponse, UpdateProductRequest } from "../types";
+import * as productDB from '../../db/product.inMemory.db';
+import { validateCreate, validateUpdate } from './product.validator';
 
 export const getAll = async (): Promise<ProductResponse[]> => {
   return await productDB.getAll();
