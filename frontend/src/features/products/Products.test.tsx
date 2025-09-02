@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import Products from './Products';
 import * as api from './api/products.api';
 import { act } from 'react';
-import { exampleProducts } from '../../testing/fixtures/exampleData';
+import { exampleProduct3, exampleProducts } from '../../testing/fixtures/exampleData';
 
 jest.mock('./api/products.api');
 const mockedDb = api as jest.Mocked<typeof api>;
@@ -37,4 +37,10 @@ test('creates a product', async () => {
 
   fireEvent.click(screen.getByRole('button'));
   expect(screen.getByRole('create-product-modal')).toBeInTheDocument();
+
+  fireEvent.change(screen.getByLabelText('product-name'), {target: {value: exampleProduct3.name}});
+  fireEvent.change(screen.getByLabelText('product-artist'), {target: {value: exampleProduct3.artist}});
+  await act(async () => fireEvent.click(screen.getByText('Save Product')));
+
+  
 });

@@ -14,6 +14,13 @@ const exampleProduct2 = {
   coverArtURL: '/products/2/coverArt'
 }
 
+export const exampleProduct3 = {
+  id: 3,
+  name: 'Sandinista!',
+  artist: 'The Clash',
+  coverArtURL: '/products/3/coverArt'
+}
+
 export const exampleProducts: Product[] = [
   exampleProduct,
   exampleProduct2

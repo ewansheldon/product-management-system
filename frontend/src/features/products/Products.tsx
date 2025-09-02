@@ -1,14 +1,11 @@
 import { useState } from "react";
 import Heading from "../../components/Heading";
 import ProductList from "./components/ProductList";
-import CreateProductModal from "./components/CreateProductModal";
+import Modal from "./components/Modal";
+import CreateProductForm from "./components/CreateProductForm";
 
 const Products = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleCreated = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <>
@@ -18,9 +15,11 @@ const Products = () => {
         <ProductList />
       </main>
       {isModalOpen && (
-        <CreateProductModal
+        <Modal
+          modalHeading="Create New Product"
+          ModalContent={CreateProductForm}
           onClose={() => setIsModalOpen(false)}
-          onCreated={handleCreated}
+          onSuccess={() => setIsModalOpen(false)}
         />
       )}
     </>

@@ -8,5 +8,5 @@ export interface Product {
 export interface CreateProductRequest {
   name: string
   artist: string
-  coverArt: File
+  coverArt?: File
 }

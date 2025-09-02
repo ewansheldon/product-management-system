@@ -1,0 +1,25 @@
+type Props = {
+  modalHeading: string;
+  ModalContent: React.ComponentType<{onClose: () => void, onSuccess: () => void}>;
+  onClose: () => void;
+  onSuccess: () => void;
+};
+
+const Modal = ({ modalHeading, ModalContent, onClose, onSuccess }: Props) => {
+  const handleBackdropClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  return (
+    <div className="modal" onClick={handleBackdropClick}>
+      <div className="modal-content">
+        <h2>{modalHeading}</h2>
+        <ModalContent onClose={onClose} onSuccess={onSuccess} />
+      </div>
+    </div>
+  );
+};
+
+export default Modal;
