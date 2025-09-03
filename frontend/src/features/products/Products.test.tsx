@@ -15,7 +15,7 @@ test('shows the list of products', async () => {
   await act(async () => render(<Products />));
 
   expect(screen.getByRole('heading')).toHaveTextContent('Products');
-  expect(screen.getByRole('button')).toHaveTextContent('Create new product');
+  expect(screen.getByRole('button')).toHaveTextContent('Add new product');
   expect(screen.getByRole('main')).toBeInTheDocument();
 
   const productNames = screen.getAllByRole('product-name');

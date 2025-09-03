@@ -36,13 +36,12 @@ const ProductList = ({ fetchToken }: ProductListProps) => {
   if (waiting) return <p>Loading products...</p>;
   if (error) return <p className="error-message">{error}</p>;
   return (
-    <div className="product-list">
+    <main className="product-list">
       {products?.map(product => (
         <ProductItem key={product.id} product={product} />
       ))}
-    </div>
+    </main>
   )
-  return products?.map(product => <ProductItem key={product.id} product={product} /> )
 }
 
-export default ProductList
+export default ProductList;

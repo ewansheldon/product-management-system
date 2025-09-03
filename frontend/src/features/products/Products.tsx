@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Heading from "../../components/Heading";
 import ProductList from "./components/ProductList";
 import Modal from "../../components/Modal";
 import CreateProductForm from "./components/CreateProductForm";
+import ProductsHeader from "./components/ProductsHeader";
 
 const Products = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -15,15 +15,8 @@ const Products = () => {
 
   return (
     <div className="products-page">
-      <header className="products-header">
-        <Heading value="Products" />
-        <button onClick={() => setIsModalOpen(true)}>Create new product</button>
-      </header>
-
-      <main className="products-main">
-        <ProductList fetchToken={productFetchToken} />
-      </main>
-
+      <ProductsHeader setIsModalOpen={setIsModalOpen} />
+      <ProductList fetchToken={productFetchToken} />
       {isModalOpen && (
         <Modal
           modalHeading="Create New Product"
