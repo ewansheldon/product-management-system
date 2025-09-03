@@ -11,15 +11,19 @@ const Products = () => {
   const updateList = () => {
     setIsModalOpen(false);
     setproductFetchToken(productFetchToken + 1);
-  }
+  };
 
   return (
-    <>
-      <Heading value="Products" />
-      <button onClick={() => setIsModalOpen(true)}>Create new product</button>
-      <main>
+    <div className="products-page">
+      <header className="products-header">
+        <Heading value="Products" />
+        <button onClick={() => setIsModalOpen(true)}>Create new product</button>
+      </header>
+
+      <main className="products-main">
         <ProductList fetchToken={productFetchToken} />
       </main>
+
       {isModalOpen && (
         <Modal
           modalHeading="Create New Product"
@@ -28,7 +32,7 @@ const Products = () => {
           onSuccess={updateList}
         />
       )}
-    </>
+    </div>
   );
 };
 

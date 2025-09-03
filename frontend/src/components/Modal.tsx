@@ -1,3 +1,5 @@
+import './Modal.css';
+
 type ModalProps = {
   modalHeading: string;
   ModalContent: React.ComponentType<{onClose: () => void, onSuccess: () => void}>;

@@ -1,3 +1,4 @@
+import "../Products.css";
 import { useEffect, useState } from "react";
 import { getProducts } from "../api/products.api";
 import { Product } from "../../../types";
@@ -34,6 +35,13 @@ const ProductList = ({ fetchToken }: ProductListProps) => {
 
   if (waiting) return <p>Loading products...</p>;
   if (error) return <p className="error-message">{error}</p>;
+  return (
+    <div className="product-list">
+      {products?.map(product => (
+        <ProductItem key={product.id} product={product} />
+      ))}
+    </div>
+  )
   return products?.map(product => <ProductItem key={product.id} product={product} /> )
 }
 
