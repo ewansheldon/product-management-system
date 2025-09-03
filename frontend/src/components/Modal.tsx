@@ -7,7 +7,6 @@ type ModalProps = {
 
 const Modal = ({ modalHeading, ModalContent, onClose, onSuccess }: ModalProps) => {
   const handleBackdropClick = (e: React.MouseEvent<HTMLElement>) => {
-    console.log(e.target === e.currentTarget);
     if (e.target === e.currentTarget) {
       onClose();
     }

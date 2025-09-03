@@ -15,7 +15,14 @@ beforeEach(() => {
   mockedDb.getProducts.mockResolvedValue(exampleProducts);
 });
 
-test('shows the list of products', async () => {
+test('it shows the list of products', async () => {
   await act(async () => render(<ProductList fetchToken={0} />));
   expect(screen.getAllByTestId('product-item')).toHaveLength(exampleProducts.length);
+});
+
+test('it refetches the list data when fetchToken updated', async () => {
+  const { rerender } = await act(async () => render(<ProductList fetchToken={0} />));
+  await act(async () => rerender(<ProductList fetchToken={1} />));
+  expect(screen.getAllByTestId('product-item')).toHaveLength(exampleProducts.length);
+  expect(mockedDb.getProducts).toHaveBeenCalledTimes(2);
 });
