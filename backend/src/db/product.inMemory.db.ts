@@ -50,12 +50,16 @@ export const update = async (id: number, productRequest: UpdateProductRequest): 
 };
 
 const deleteCoverArt = (id: number) => {
-  fs.rmSync(coverArtFilePath(id));
+  fs.rmSync(coverArtFilePath(id), { recursive: true });
 }
 
 export const remove = async (id: number) => {
-  products = products.filter(product => product.id !== id);
-  deleteCoverArt(id);
+  try {
+    products = products.filter(product => product.id !== id);
+    deleteCoverArt(id);
+  } catch(e) {
+    throw new InvalidParamsError('Invalid product ID');
+  }
 };
 
 export const getProductCoverArt = (id: number): Buffer => {
