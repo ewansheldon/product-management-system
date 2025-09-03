@@ -32,4 +32,73 @@ test('posts form data if all values are present', async () => {
   expectedFormData.append('coverArt', testCoverArt);
 
   expect(mockedApi.createProduct).toHaveBeenCalledWith(expectedFormData);
+  expect(onSuccess).toHaveBeenCalled();
+});
+
+test('does not post if name missing', async () => {
+  render(
+    <CreateProductForm 
+      onSuccess={onSuccess}
+      onClose={onClose}
+    />
+  );
+
+  const testCoverArt = new File(['coverArt'], 'coverArt.jpg', { type: 'image/jpg' });
+  fireEvent.change(screen.getByLabelText('product-artist'), {target: {value: exampleProduct3.artist}});
+  fireEvent.change(screen.getByLabelText('product-cover-art'), {target: {files: [ testCoverArt ]}});
+
+  await act(async () => fireEvent.click(screen.getByText('Save')));
+
+  expect(screen.getByLabelText('product-name')).toBeInvalid();
+  expect(mockedApi.createProduct).not.toHaveBeenCalled();
+  expect(onSuccess).not.toHaveBeenCalled();
+});
+
+test('does not post if artist missing', async () => {
+  render(
+    <CreateProductForm 
+      onSuccess={onSuccess}
+      onClose={onClose}
+    />
+  );
+
+  const testCoverArt = new File(['coverArt'], 'coverArt.jpg', { type: 'image/jpg' });
+  fireEvent.change(screen.getByLabelText('product-name'), {target: {value: exampleProduct3.name}});
+  fireEvent.change(screen.getByLabelText('product-cover-art'), {target: {files: [ testCoverArt ]}});
+
+  await act(async () => fireEvent.click(screen.getByText('Save')));
+
+  expect(screen.getByLabelText('product-artist')).toBeInvalid();
+  expect(mockedApi.createProduct).not.toHaveBeenCalled();
+  expect(onSuccess).not.toHaveBeenCalled();
+});
+
+test('does not post if artist missing', async () => {
+  render(
+    <CreateProductForm 
+      onSuccess={onSuccess}
+      onClose={onClose}
+    />
+  );
+
+  fireEvent.change(screen.getByLabelText('product-name'), {target: {value: exampleProduct3.name}});
+  fireEvent.change(screen.getByLabelText('product-artist'), {target: {value: exampleProduct3.artist}});
+
+  await act(async () => fireEvent.click(screen.getByText('Save')));
+
+  expect(mockedApi.createProduct).not.toHaveBeenCalled();
+  expect(onSuccess).not.toHaveBeenCalled();
+});
+
+test('calls close callback with close button', async () => {
+  render(
+    <CreateProductForm 
+      onSuccess={onSuccess}
+      onClose={onClose}
+    />
+  );
+
+  await act(async () => fireEvent.click(screen.getByText('Cancel')));
+
+  expect(onClose).toHaveBeenCalled();
 });
