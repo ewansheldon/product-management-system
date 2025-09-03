@@ -61,7 +61,7 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
         value={product.name}
         onChange={handleChange}
         aria-label="product-name"
-        // required
+        required
       />
       <input
         type="text"
