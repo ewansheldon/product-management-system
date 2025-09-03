@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CreateProductRequest } from "../../../types";
+import { createProduct } from "../api/products.api";
 
 interface CreateProductFormProps {
   onClose: () => void;
@@ -18,11 +19,15 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!product.coverArt) return alert('Please upload cover art');
     const formData = new FormData();
     formData.append("name", product.name);
     formData.append("artist", product.artist);
+    formData.append("coverArt", product.coverArt);
 
-    onSuccess();
+    createProduct(formData).then(_data => {
+      onSuccess();
+    });
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,9 +39,10 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
       <input
         type="text"
         name="name"
-        placeholder="Product Name"
+        placeholder="Name"
         value={product.name}
         onChange={handleChange}
+        aria-label="product-name"
         required
       />
       <input
@@ -45,12 +51,20 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
         placeholder="Artist"
         value={product.artist}
         onChange={handleChange}
+        aria-label="product-artist"
         required
       />
-      <input type="file" accept="image/*" onChange={handleFileChange} required />
+      <input
+        type="file"
+        name="cover-art"
+        accept="image/png, image/jpeg"
+        placeholder="Upload an Image"
+        onChange={handleFileChange}
+        aria-label="product-cover-art"
+      />
 
-      <button type="submit">Create</button>
-      <button type="button" onClick={onClose}>Cancel</button>
+      <button type="submit">Save</button>
+      <button className="button-cancel" type="button" onClick={onClose}>Cancel</button>
     </form>
   );
 };

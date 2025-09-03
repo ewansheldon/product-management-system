@@ -13,7 +13,7 @@ const Modal = ({ modalHeading, ModalContent, onClose, onSuccess }: Props) => {
   };
 
   return (
-    <div className="modal" onClick={handleBackdropClick}>
+    <div className="modal" aria-modal="true" role="dialog" onClick={handleBackdropClick}>
       <div className="modal-content">
         <h2>{modalHeading}</h2>
         <ModalContent onClose={onClose} onSuccess={onSuccess} />

@@ -1,14 +1,16 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import fs from 'fs';
+import path from 'path';
 import Products from './Products';
 import * as api from './api/products.api';
 import { act } from 'react';
 import { exampleProduct3, exampleProducts } from '../../testing/fixtures/exampleData';
 
 jest.mock('./api/products.api');
-const mockedDb = api as jest.Mocked<typeof api>;
+const mockedApi = api as jest.Mocked<typeof api>;
 
 beforeEach(() => {
-  mockedDb.getProducts.mockResolvedValue(exampleProducts);
+  mockedApi.getProducts.mockResolvedValue(exampleProducts);
 });
 
 test('shows the list of products', async () => {
@@ -36,11 +38,32 @@ test('creates a product', async () => {
   await act(async () => render(<Products />));
 
   fireEvent.click(screen.getByRole('button'));
-  expect(screen.getByRole('create-product-modal')).toBeInTheDocument();
+  expect(screen.getByRole('dialog')).toBeInTheDocument();
 
+  const testCoverArt = new File(['coverArt'], 'coverArt.jpg', { type: 'image/jpg' });
   fireEvent.change(screen.getByLabelText('product-name'), {target: {value: exampleProduct3.name}});
   fireEvent.change(screen.getByLabelText('product-artist'), {target: {value: exampleProduct3.artist}});
-  await act(async () => fireEvent.click(screen.getByText('Save Product')));
+  fireEvent.change(screen.getByLabelText('product-cover-art'), {target: {files: [ testCoverArt ]}});
 
-  
+  const updatedProductsList = [ ... exampleProducts, exampleProduct3]
+  mockedApi.getProducts.mockResolvedValue(updatedProductsList);
+  mockedApi.createProduct.mockResolvedValue(exampleProduct3);
+  await act(async () => fireEvent.click(screen.getByText('Save')));
+
+  const expectedFormData = new FormData();
+  expectedFormData.append('name', exampleProduct3.name)
+  expectedFormData.append('artist', exampleProduct3.artist)
+  expectedFormData.append('coverArt', testCoverArt);
+
+  expect(mockedApi.createProduct).toHaveBeenCalledWith(expectedFormData);
+
+  const productNames = screen.getAllByRole('product-name');
+  expect(productNames).toHaveLength(updatedProductsList.length);
+  expect(productNames[2]).toHaveTextContent(exampleProduct3.name);
+
+  const productArtists = screen.getAllByRole('product-artist');
+  expect(productArtists).toHaveLength(updatedProductsList.length);
+  expect(productArtists[2]).toHaveTextContent(exampleProduct3.artist);
+
+  expect(screen.getByAltText(`Cover art for ${exampleProduct3.name} by ${exampleProduct3.artist}`)).toBeInTheDocument();
 });
