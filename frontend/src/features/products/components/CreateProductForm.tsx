@@ -87,7 +87,7 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
 
       {
         waiting ?
-          <p>Creating new product ...</p> :
+          <p>Creating new product...</p> :
           <>
             <button type="submit">Save</button>
             <button className="button-cancel" type="button" onClick={onClose}>Cancel</button>

@@ -118,6 +118,7 @@ test('displays api error message on form', async () => {
 
   const errorMessage = 'Invalid params';
   mockedApi.createProduct.mockRejectedValue(new ApiError(errorMessage, 400));
+
   await act(async () => fireEvent.click(screen.getByText('Save')));
 
   expect(onSuccess).not.toHaveBeenCalled();
