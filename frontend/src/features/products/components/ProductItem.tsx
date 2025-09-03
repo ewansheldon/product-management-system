@@ -1,6 +1,7 @@
 import "../Products.css";
 import { Product } from "../../../types";
 import { coverArtAltText, coverArtSrc } from "../utils/products.utils";
+import { memo } from "react";
 
 interface ProductItemProps {
   product: Product
@@ -18,4 +19,4 @@ const ProductItem = ({product}: ProductItemProps) => {
   )
 }
 
-export default ProductItem
+export default memo(ProductItem);
