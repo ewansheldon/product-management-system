@@ -3,6 +3,7 @@ import CreateProductForm from "./CreateProductForm";
 import { exampleProduct3 } from "../../../testing/fixtures/exampleData";
 import { act } from "react";
 import * as api from '../api/products.api';
+import { ApiError } from "../../../errors/ApiError";
 
 jest.mock('../api/products.api');
 const mockedApi = api as jest.Mocked<typeof api>;
@@ -100,4 +101,25 @@ test('calls close callback with close button', async () => {
 
   await act(async () => fireEvent.click(screen.getByText('Cancel')));
   expect(onClose).toHaveBeenCalled();
+});
+
+test('displays api error message on form', async () => {
+  render(
+    <CreateProductForm 
+      onSuccess={onSuccess}
+      onClose={onClose}
+    />
+  );
+
+  fireEvent.change(screen.getByLabelText('product-name'), {target: {value: exampleProduct3.name}});
+  fireEvent.change(screen.getByLabelText('product-artist'), {target: {value: exampleProduct3.artist}});
+  const testCoverArt = new File(['coverArt'], 'coverArt.jpg', { type: 'image/jpg' });
+  fireEvent.change(screen.getByLabelText('product-cover-art'), {target: {files: [ testCoverArt ]}});
+
+  const errorMessage = 'Invalid params';
+  mockedApi.createProduct.mockRejectedValue(new ApiError(errorMessage, 400));
+  await act(async () => fireEvent.click(screen.getByText('Save')));
+
+  expect(onSuccess).not.toHaveBeenCalled();
+  expect(screen.getByText(errorMessage)).toBeInTheDocument();
 });
