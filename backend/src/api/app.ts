@@ -46,7 +46,7 @@ app.patch('/products/:id', upload.single('coverArt'), async (req: Request, res: 
       ...req.body,
       coverArt: req.file?.buffer
     };
-    res.status(200).json(await productController.update(Number(req.params.id), productRequest));
+    res.json(await productController.update(Number(req.params.id), productRequest));
   } catch (e) {
     next(e);
   }
