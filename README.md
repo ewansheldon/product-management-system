@@ -1,6 +1,6 @@
 # Product Management System
 
-This simple product management system for a music-centric environment, made up of an API service and a client application.
+This is a simple product management system for a music-centric environment, made up of an API service and a client application.
 
 This system allows you to create a product, providing:
 - the name of the product
