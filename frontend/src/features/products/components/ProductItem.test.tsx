@@ -1,4 +1,3 @@
-import { act } from "react";
 import ProductItem from "./ProductItem";
 import { render, screen } from "@testing-library/react";
 import { exampleProduct } from "../../../testing/fixtures/exampleData";

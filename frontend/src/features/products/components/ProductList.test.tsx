@@ -16,6 +16,6 @@ beforeEach(() => {
 });
 
 test('shows the list of products', async () => {
-  await act(async () => render(<ProductList />));
+  await act(async () => render(<ProductList fetchToken={0} />));
   expect(screen.getAllByTestId('product-item')).toHaveLength(exampleProducts.length);
 });

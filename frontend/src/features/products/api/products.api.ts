@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "../../../config/api";
 import { fetchJson } from "../../../lib/fetchWrapper";
-import { CreateProductRequest, Product } from "../../../types";
+import { Product } from "../../../types";
 
 const productsURL = `${API_BASE_URL}/products`;
 
