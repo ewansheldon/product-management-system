@@ -21,6 +21,12 @@ test('it shows the list of products', async () => {
   expect(screen.getAllByTestId('product-item')).toHaveLength(exampleProducts.length);
 });
 
+test('it shows empty list message', async () => {
+  mockedApi.getProducts.mockResolvedValue([]);
+  await act(async () => render(<ProductList fetchToken={0} />));
+  expect(screen.getByText('Currently no products to display')).toBeInTheDocument();
+});
+
 test('it refetches the list data when fetchToken updated', async () => {
   const { rerender } = await act(async () => render(<ProductList fetchToken={0} />));
   await act(async () => rerender(<ProductList fetchToken={1} />));

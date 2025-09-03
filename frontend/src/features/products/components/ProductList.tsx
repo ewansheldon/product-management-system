@@ -14,29 +14,42 @@ const ProductList = ({ fetchToken }: ProductListProps) => {
   const { waiting, setWaiting, error, setError } = useAsyncFetchState();
   const [ products, setProducts ] = useState<Product[]>();
 
-  const fetchProducts = async () => {
-    setWaiting(true);
-    setError(null);
-    try {
-      const data = await getProducts();
-      setProducts(data);
-    } catch (e) {
-      e instanceof ApiError ?
-        setError(e.message) :
-        setError('Failed to fetch products');
-    } finally {
-      setWaiting(false);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setWaiting(true);
+      setError(null);
+      try {
+        const data = await getProducts();
+        setProducts(data);
+      } catch (e) {
+        if (e instanceof ApiError) {
+          setError(e.message);
+        } else {
+          setError('Failed to fetch products');
+        }
+      } finally {
+        setWaiting(false);
+      }
     }
+
+    fetchProducts();
+  }, [fetchToken, setWaiting, setError])
+
+  const productsEmpty = (): boolean => {
+    return products?.length === 0;
   }
 
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchToken])
-
-  if (waiting) return <p>Loading products...</p>;
-  if (error) return <p className="error-message">{error}</p>;
   return (
     <main className="product-list">
+      {
+        waiting && <p>Loading products...</p>
+      }
+      {
+        error && <p className="error-message">{error}</p>
+      }
+      {
+        productsEmpty() && <p>Currently no products to display</p>
+      }
       {products?.map(product => (
         <ProductItem key={product.id} product={product} />
       ))}
