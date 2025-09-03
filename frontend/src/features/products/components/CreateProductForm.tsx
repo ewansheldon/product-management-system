@@ -20,19 +20,15 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setWaiting(true);
-    if (!product.coverArt) return alert('Please upload cover art');
+  const createFormData = (): FormData => {
     const formData = new FormData();
     formData.append("name", product.name);
     formData.append("artist", product.artist);
-    formData.append("coverArt", product.coverArt);
+    formData.append("coverArt", product.coverArt!);
+    return formData;
+  }
 
-    createProduct(formData).then(_data => {
-      onSuccess();
-    });
-
+  const handleAsyncPost = async (formData: FormData) => {
     try {
       await createProduct(formData);
       onSuccess();
@@ -43,6 +39,14 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
     } finally {
       setWaiting(false);
     }
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setWaiting(true);
+    if (!product.coverArt) return alert('Please upload cover art');
+    const formData = createFormData();
+    await handleAsyncPost(formData);
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
