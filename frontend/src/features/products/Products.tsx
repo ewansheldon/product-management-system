@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Heading from "../../components/Heading";
 import ProductList from "./components/ProductList";
-import Modal from "./components/Modal";
+import Modal from "../../components/Modal";
 import CreateProductForm from "./components/CreateProductForm";
 
 const Products = () => {
