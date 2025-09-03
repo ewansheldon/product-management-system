@@ -7,14 +7,15 @@ type ModalProps = {
 
 const Modal = ({ modalHeading, ModalContent, onClose, onSuccess }: ModalProps) => {
   const handleBackdropClick = (e: React.MouseEvent<HTMLElement>) => {
+    console.log(e.target === e.currentTarget);
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
 
   return (
-    <div className="modal" aria-modal="true" role="dialog" onClick={handleBackdropClick}>
-      <div className="modal-content">
+    <div className="modal" role="dialog-backdrop" onClick={handleBackdropClick}>
+      <div className="modal-content" aria-modal="true" role="dialog">
         <h2>{modalHeading}</h2>
         <ModalContent onClose={onClose} onSuccess={onSuccess} />
       </div>

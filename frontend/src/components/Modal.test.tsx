@@ -1,6 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import Modal from './Modal';
 
+const modalHeadingValue = 'foo bar';
+const onSuccessMock = jest.fn();
+const onCloseMock = jest.fn();
+
 type ModalContentProps = {
   onSuccess: () => void;
   onClose: () => void;
@@ -15,23 +19,32 @@ const ModalContent = ({ onSuccess, onClose }: ModalContentProps) => {
   )
 }
 
-test('shows a heading', async () => {
-  const modalHeadingValue = 'foo bar';
-  const onSuccess = jest.fn();
-  const onClose = jest.fn();
+test('shows heading and content', async () => {
   render(
     <Modal
       modalHeading={modalHeadingValue}
       ModalContent={ModalContent}
-      onSuccess={onSuccess}
-      onClose={onClose}
+      onSuccess={onSuccessMock}
+      onClose={onCloseMock}
     />
   );
 
-  expect(screen.getByTestId('modal-content')).toBeInTheDocument();
   expect(screen.getByRole('heading')).toHaveTextContent(modalHeadingValue);
+  expect(screen.getByTestId('modal-content')).toBeInTheDocument();
+});
+
+test('passes callback functions to modal content component', async () => {
+  render(
+    <Modal
+      modalHeading={modalHeadingValue}
+      ModalContent={ModalContent}
+      onSuccess={onSuccessMock}
+      onClose={onCloseMock}
+    />
+  );
+
   fireEvent.click(screen.getByTestId('success-button'));
-  expect(onSuccess).toHaveBeenCalled();
+  expect(onSuccessMock).toHaveBeenCalled();
   fireEvent.click(screen.getByTestId('close-button'));
-  expect(onClose).toHaveBeenCalled();
+  expect(onCloseMock).toHaveBeenCalled();
 });
