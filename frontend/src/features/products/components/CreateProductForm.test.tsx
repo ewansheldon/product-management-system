@@ -99,6 +99,5 @@ test('calls close callback with close button', async () => {
   );
 
   await act(async () => fireEvent.click(screen.getByText('Cancel')));
-
   expect(onClose).toHaveBeenCalled();
 });

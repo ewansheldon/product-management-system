@@ -26,3 +26,9 @@ test('it refetches the list data when fetchToken updated', async () => {
   expect(screen.getAllByTestId('product-item')).toHaveLength(exampleProducts.length);
   expect(mockedApi.getProducts).toHaveBeenCalledTimes(2);
 });
+
+test('it shows basic error message if fetch failed', async () => {
+  mockedApi.getProducts.mockRejectedValue(exampleProducts);
+  await act(async () => render(<ProductList fetchToken={0} />));
+  expect(screen.getAllByTestId('product-item')).not.toBeInTheDocument();
+});

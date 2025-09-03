@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { CreateProductRequest } from "../../../types";
 import { createProduct } from "../api/products.api";
+import { useAsyncFetchState } from "../../../hooks/useAsyncFetchState";
+import { ApiError } from "../../../errors/ApiError";
 
 interface CreateProductFormProps {
   onClose: () => void;
@@ -8,6 +10,7 @@ interface CreateProductFormProps {
 }
 
 const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
+  const { waiting, setWaiting, error, setError } = useAsyncFetchState();
   const [product, setProduct] = useState<CreateProductRequest>({
     name: "",
     artist: ""
@@ -17,8 +20,9 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setWaiting(true);
     if (!product.coverArt) return alert('Please upload cover art');
     const formData = new FormData();
     formData.append("name", product.name);
@@ -28,6 +32,17 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
     createProduct(formData).then(_data => {
       onSuccess();
     });
+
+    try {
+      await createProduct(formData);
+      onSuccess();
+    } catch (e) {
+      e instanceof ApiError ?
+        setError(e.message) :
+        setError('Failed to create product');
+    } finally {
+      setWaiting(false);
+    }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +51,9 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      {
+        error && <p className="error-message">{error}</p>
+      }
       <input
         type="text"
         name="name"
@@ -43,7 +61,7 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
         value={product.name}
         onChange={handleChange}
         aria-label="product-name"
-        required
+        // required
       />
       <input
         type="text"
@@ -63,8 +81,14 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
         aria-label="product-cover-art"
       />
 
-      <button type="submit">Save</button>
-      <button className="button-cancel" type="button" onClick={onClose}>Cancel</button>
+      {
+        waiting ?
+          <p>Creating new product ...</p> :
+          <>
+            <button type="submit">Save</button>
+            <button className="button-cancel" type="button" onClick={onClose}>Cancel</button>
+          </>
+      }
     </form>
   );
 };
