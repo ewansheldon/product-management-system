@@ -1,6 +1,6 @@
-## API Documentation
+# API Documentation
 
-### Get all products
+## Get all products
 
 **GET** `/products`
 
@@ -25,7 +25,7 @@ Example curl: `curl $API_URL/products`
 
 ---
 
-### Create Product
+## Create Product
 
 **POST** `/products`
 
@@ -52,7 +52,7 @@ Example curl: `curl -X POST $API_URL/products -F "name=album name" -F "artist=ar
 
 ---
 
-### Update Product
+## Update Product
 
 **PATCH** `/products/:id`
 
@@ -79,7 +79,7 @@ Example curl: `curl -X PATCH $API_URL/products/1 -F "name=new album name"`
 
 ---
 
-### Delete product
+## Delete product
 
 **DELETE** `/products/:id`
 
