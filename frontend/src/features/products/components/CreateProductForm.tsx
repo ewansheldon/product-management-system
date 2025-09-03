@@ -29,13 +29,16 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
   }
 
   const handleAsyncPost = async (formData: FormData) => {
+    setWaiting(true);
     try {
       await createProduct(formData);
       onSuccess();
     } catch (e) {
-      e instanceof ApiError ?
-        setError(e.message) :
+      if (e instanceof ApiError) {
+        setError(e.message)
+      } else {
         setError('Failed to create product');
+      }
     } finally {
       setWaiting(false);
     }
@@ -43,7 +46,6 @@ const CreateProductForm = ({ onClose, onSuccess }: CreateProductFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setWaiting(true);
     if (!product.coverArt) return alert('Please upload cover art');
     const formData = createFormData();
     await handleAsyncPost(formData);
