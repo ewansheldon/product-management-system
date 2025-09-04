@@ -14,7 +14,7 @@ services:
     build: ./frontend
     container_name: frontend
     ports:
-      - "5173:5173"
+      - "8080:80"
     depends_on:
       - backend
   
@@ -24,4 +24,4 @@ services:
       - backend
       - frontend
     command: >
-      sh -c 'echo "✅ Backend running at http://localhost:3000/" && echo "✅ Frontend running at http://localhost:5173/"'
+      sh -c 'echo "✅ Backend running at http://localhost:3000/" && echo "✅ Frontend running at http://localhost:8080/"'

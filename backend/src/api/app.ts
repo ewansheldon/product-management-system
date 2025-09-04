@@ -10,7 +10,8 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use(cors({ origin: "http://localhost:5173" }));
+// temporary for "production" style builds
+app.use(cors({ origin: "http://localhost:8080" }));
 
 const upload = multer({
   storage: multer.memoryStorage(),
