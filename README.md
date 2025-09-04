@@ -57,6 +57,6 @@ npm test
 
 ## Considerations
 
-- All products are stored in memory in the API service, therefore restarting the application will reset the product data. The [in-memory DB](backend/src/db/product.inMemory.db.ts) file needs to be replaced by a real database interface to add persistence.
+- All products are stored in memory in the API service, therefore restarting the application will reset the product data. The [in-memory DB](backend/src/db/product.inMemory.db.ts) needs to be replaced by a real database interface to add persistence.
 - Uploads are also stored locally in the API project directory, and cleared every time the application starts. There is a temporary route `/products/:id/coverArt` to retrieve images. In a production environment, this could be replaced by uploads to cloud object storage and retrieved via a CDN from the client application.
 - The API has fully functioning update and delete routes for products, but these are not yet supported from the client application.
