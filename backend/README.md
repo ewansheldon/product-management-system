@@ -1,6 +1,22 @@
-# API Documentation
+# API service
 
-## Get all products
+The API is written with Express + Typescript. To run in dev mode:
+
+```
+cd backend
+npm install
+npm start
+```
+
+To run the tests:
+
+```
+npm test
+```
+
+## API Documentation
+
+### Get all products
 
 **GET** `/products`
 
@@ -25,7 +41,7 @@ Example curl: `curl $API_URL/products`
 
 ---
 
-## Create Product
+### Create Product
 
 **POST** `/products`
 
@@ -52,7 +68,7 @@ Example curl: `curl -X POST $API_URL/products -F "name=album name" -F "artist=ar
 
 ---
 
-## Update Product
+### Update Product
 
 **PATCH** `/products/:id`
 
@@ -79,7 +95,7 @@ Example curl: `curl -X PATCH $API_URL/products/1 -F "name=new album name"`
 
 ---
 
-## Delete product
+### Delete product
 
 **DELETE** `/products/:id`
 

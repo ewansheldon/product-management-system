@@ -37,7 +37,7 @@ To run the tests:
 npm test
 ```
 
-The documentation for using the API can be found [here](backend/README.md).
+The documentation for using the API can be found [here](backend/README.md#api-documentation).
 
 ## Client Application
 
